@@ -55,6 +55,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Date mLastEdited;
 
     private EditText mToDoTextBodyEditText;
+    private EditText mToDoTextBodyLabel;
     private EditText mToDoTextBodyDescription;
 
     private SwitchCompat mToDoDateSwitch;
@@ -80,6 +81,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static final String DATE_FORMAT_TIME = "H:m";
 
     private String mUserEnteredText;
+    private String mUserEnteredLabel;
     private String mUserEnteredDescription;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
@@ -129,8 +131,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         mUserToDoItem = (ToDoItem) getActivity().getIntent().getSerializableExtra(MainFragment.TODOITEM);
-
         mUserEnteredText = mUserToDoItem.getToDoText();
+        mUserEnteredLabel = mUserToDoItem.getmToDoLabel();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
@@ -160,6 +162,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mContainerLayout = (LinearLayout) view.findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
+        mToDoTextBodyLabel = (EditText) view.findViewById(R.id.userToDoLabel);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
@@ -172,9 +175,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onClick(View view) {
                 String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
+                String toDoLabelContainer = mToDoTextBodyLabel.getText().toString();
                 String toDoTextBodyDescriptionContainer = mToDoTextBodyDescription.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                CombinationText = "Title : " + toDoTextContainer + "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
+                CombinationText = "Title : " + toDoTextContainer + "\nLabel: " + toDoLabelContainer +  "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
                 ClipData clip = ClipData.newPlainText("text", CombinationText);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
@@ -209,13 +213,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        til.requestFocus();
         mToDoTextBodyEditText.requestFocus();
         mToDoTextBodyEditText.setText(mUserEnteredText);
+        mToDoTextBodyLabel.setText(mUserEnteredLabel);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
+
         InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(mToDoTextBodyEditText, InputMethodManager.SHOW_IMPLICIT);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         mToDoTextBodyEditText.setSelection(mToDoTextBodyEditText.length());
-
-
         mToDoTextBodyEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -230,6 +234,27 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             public void afterTextChanged(Editable s) {
             }
         });
+
+
+        mToDoTextBodyLabel.setText(mUserEnteredLabel);
+        mToDoTextBodyLabel.setSelection(mUserEnteredLabel.length());
+        mToDoTextBodyLabel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mUserEnteredLabel = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
         mToDoTextBodyDescription.setSelection(mToDoTextBodyDescription.length());
         mToDoTextBodyDescription.addTextChangedListener(new TextWatcher() {
@@ -591,10 +616,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
             String capitalizedString = Character.toUpperCase(mUserEnteredText.charAt(0)) + mUserEnteredText.substring(1);
             mUserToDoItem.setToDoText(capitalizedString);
+
+
+            Log.d(TAG, "Label: " + mUserEnteredLabel);
+            mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
+
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
         } else {
             mUserToDoItem.setToDoText(mUserEnteredText);
+
+            Log.d(TAG, "Label: " + mUserEnteredLabel);
+            mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
+
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
         }

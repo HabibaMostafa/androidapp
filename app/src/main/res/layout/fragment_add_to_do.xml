@@ -18,6 +18,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+
             <LinearLayout
                 android:id="@+id/editTextParentLinearLayout"
                 android:layout_width="match_parent"
@@ -53,12 +55,42 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/toDoLabelSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="20dp"
+                android:orientation="vertical">
+
+                <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
+                    android:id="@+id/toDoLabelSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/userToDoLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginRight="32dp"
+                        android:layout_weight="0"
+                        android:gravity="start|bottom"
+                        android:hint="@string/user_label"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/icons" />
+
+                </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
+            </LinearLayout>
+
 
             <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
                 android:id="@+id/toDoCustomTextInput01"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:gravity="center"
                 android:paddingTop="20dp"
                 app:hintTextAppearance="@style/FloatingLabelTextAppearance">
@@ -66,10 +98,9 @@
                 <EditText
                     android:id="@+id/userToDoDescription"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
-                    android:layout_weight="0"
                     android:gravity="start|bottom"
                     android:hint="@string/description"
                     android:inputType="textMultiLine|textCapSentences"
@@ -219,7 +250,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ic_send_white_18dp"
+            android:contentDescription="Accept Button"
+            android:src="@drawable/ic_done_white_24dp"
             app:fabSize="normal"
             app:layout_anchor="@id/editTextParentLinearLayout"
             app:layout_anchorGravity="bottom|right" />

@@ -12,6 +12,7 @@ public class ToDoItem implements Serializable {
     private boolean mHasReminder;
     //add description
     private String mToDoDescription;
+    private String mToDoLabel;
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -24,24 +25,37 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
+    private static final String TODOLABEL = "todolabel";
 
 
-    public ToDoItem(String todoBody,String tododescription,  boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
+        mToDoLabel = "";
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
     }
 
+    public ToDoItem(String todoBody,String tododescription, String todolabel, boolean hasReminder, Date toDoDate) {
+        mToDoText = todoBody;
+        mHasReminder = hasReminder;
+        mToDoDate = toDoDate;
+        mToDoLabel = todolabel;
+        mToDoDescription = tododescription;
+        mTodoColor = 1677725;
+        mTodoIdentifier = UUID.randomUUID();
+
+    }
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
+        mToDoLabel = jsonObject.getString(TODOLABEL);
         mToDoDescription = jsonObject.getString(TODODESCRIPTION);
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
-
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
+
 
 //        if(jsonObject.has(TODOLASTEDITED)){
 //            mLastEdited = new Date(jsonObject.getLong(TODOLASTEDITED));
@@ -55,6 +69,7 @@ public class ToDoItem implements Serializable {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TODOTEXT, mToDoText);
         jsonObject.put(TODOREMINDER, mHasReminder);
+        jsonObject.put(TODOLABEL, mToDoLabel);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
@@ -70,6 +85,15 @@ public class ToDoItem implements Serializable {
     public ToDoItem() {
         this("Clean my room","Sweep and Mop my Room", true, new Date());
     }
+
+
+    public String getmToDoLabel() {
+        return mToDoLabel;
+    }
+    public void setmToDoLabel(String newLabel){this.mToDoLabel = newLabel;}
+
+
+
 
     public String getmToDoDescription() { return mToDoDescription;}
 
