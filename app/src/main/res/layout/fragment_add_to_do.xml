@@ -1,6 +1,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,12 +20,10 @@
             android:orientation="vertical">
 
 
-
             <LinearLayout
                 android:id="@+id/editTextParentLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".5"
+                android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -55,18 +54,69 @@
 
             </LinearLayout>
 
+
+            <LinearLayout
+                android:id="@+id/toDoStatusSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/toDoStatusTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:text="Status"
+                    android:textAppearance="@style/ToolbarTitleTextAppearanceDark"
+                    android:textColor="@color/secondary_text" />
+
+                <RadioGroup
+                    android:id="@+id/toDoStatusGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
+
+                    <RadioButton
+                        android:id="@+id/toDoRadioComplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Complete" />
+
+                    <RadioButton
+                        android:id="@+id/toDoRadioInProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="In Progress" />
+
+                    <RadioButton
+                        android:id="@+id/toDoRadioIncomplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Incomplete" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/toDoLabelSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="20dp">
 
                 <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
                     android:id="@+id/toDoLabelSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/userToDoLabel"
@@ -105,7 +155,7 @@
                     android:hint="@string/description"
                     android:inputType="textMultiLine|textCapSentences"
                     android:lines="2"
-                    android:maxLines="3"
+                    android:maxLines="6"
                     android:scrollbars="vertical"
                     android:textColor="@color/icons" />
 
@@ -211,7 +261,7 @@
                             android:gravity="center"
                             android:padding="4dp"
                             android:text="\@"
-                            android:textColor="?attr/colorAccent" />
+                            android:textColor="@color/amber" />
 
                         <EditText
                             android:id="@+id/newTodoTimeEditText"
@@ -252,6 +302,7 @@
             android:layout_marginRight="16dp"
             android:contentDescription="Accept Button"
             android:src="@drawable/ic_done_white_24dp"
+            app:backgroundTint="@color/amber"
             app:fabSize="normal"
             app:layout_anchor="@id/editTextParentLinearLayout"
             app:layout_anchorGravity="bottom|right" />

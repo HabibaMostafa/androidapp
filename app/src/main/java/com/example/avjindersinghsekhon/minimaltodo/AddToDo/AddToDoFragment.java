@@ -21,7 +21,9 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -30,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
@@ -40,6 +44,8 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,6 +63,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private EditText mToDoTextBodyEditText;
     private EditText mToDoTextBodyLabel;
     private EditText mToDoTextBodyDescription;
+
+    private RadioGroup mToDoStatusGroup;
+    private RadioButton mToDoStatusRadioButton;
 
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
@@ -83,6 +92,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String mUserEnteredText;
     private String mUserEnteredLabel;
     private String mUserEnteredDescription;
+    private String mUserChosenStatus;
+
+
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
@@ -95,12 +107,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        Log.d("Tagged", "Ayyyyy tone");
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
         //Need references to these to change them during light/dark mode
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
+
+
+//        check the radio
+
 
 
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
@@ -137,7 +155,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
+        mUserChosenStatus = mUserToDoItem.getmToDoStatus();
 
+
+        // refer to the existing ToDoItem and check the appropriate radio button:
+        checkToDoSavedStatus(view, mUserToDoItem);
+
+        // listens to the radio if it is changed
+        addListenerRadio(view);
 
 //        if(mUserToDoItem.getLastEdited()==null) {
 //            mLastEdited = new Date();
@@ -145,6 +170,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        else{
 //            mLastEdited = mUserToDoItem.getLastEdited();
 //        }
+
+
+
+
 
 
         reminderIconImageButton = (ImageButton) view.findViewById(R.id.userToDoReminderIconImageButton);
@@ -178,7 +207,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 String toDoLabelContainer = mToDoTextBodyLabel.getText().toString();
                 String toDoTextBodyDescriptionContainer = mToDoTextBodyDescription.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                CombinationText = "Title : " + toDoTextContainer + "\nLabel: " + toDoLabelContainer +  "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
+                CombinationText = "Title : " + toDoTextContainer + "\nStatus: "+ mUserChosenStatus + "\nLabel: " + toDoLabelContainer +  "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
                 ClipData clip = ClipData.newPlainText("text", CombinationText);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
@@ -439,6 +468,52 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     }
 
+    private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
+        RadioGroup rg = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        rg.clearCheck();
+
+        //default will be set to incomplete
+        rg.check(R.id.toDoRadioIncomplete);
+
+        String status = mUserToDoItem.getmToDoStatus();
+
+        if(status.equals("Complete")) {
+            rg.check(R.id.toDoRadioComplete);
+        }
+
+        else if (status.equals("In Progress")) {
+            rg.check(R.id.toDoRadioInProgress);
+        }
+
+//        else if (status.equals("Incomplete")) {
+//            rg.check(R.id.toDoRadioIncomplete);
+//        }
+
+
+        return;
+    }
+
+    private void addListenerRadio(View view) {
+        mToDoStatusGroup = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        int selected = mToDoStatusGroup.getCheckedRadioButtonId();
+        mToDoStatusRadioButton = (RadioButton) view.findViewById(selected);
+//        mUserChosenStatus = (String) mToDoStatusRadioButton.getText();
+
+        mToDoStatusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
+                boolean isSelected = checkedRadioBtn.isChecked();
+
+                if(isSelected) {
+                    mUserChosenStatus = (String)checkedRadioBtn.getText();
+
+                }
+            }
+        });
+        return;
+    }
+
     private void setDateAndTimeEditText() {
 
         if (mUserToDoItem.hasReminder() && mUserReminderDate != null) {
@@ -621,10 +696,16 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             Log.d(TAG, "Label: " + mUserEnteredLabel);
             mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
 
+            Log.d(TAG, "Status: " + mUserChosenStatus);
+            mUserToDoItem.setmToDoStatus(mUserChosenStatus);
+
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
         } else {
             mUserToDoItem.setToDoText(mUserEnteredText);
+
+            Log.d(TAG, "Status: " + mUserChosenStatus);
+            mUserToDoItem.setmToDoStatus(mUserChosenStatus);
 
             Log.d(TAG, "Label: " + mUserEnteredLabel);
             mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
