@@ -89,14 +89,15 @@
                 android:paddingTop="20dp">
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/labelSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
                     android:id="@+id/toDoLabelSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/userToDoLabel"

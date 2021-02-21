@@ -34,6 +34,8 @@ import android.content.ClipboardManager;
 import android.widget.Toast;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
@@ -474,8 +476,16 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            }
 //        });
         updateLabelList();
+//        List<String> spinnerArr = new ArrayList<String>()
 
 
+        // populate the spinnerlist
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
+        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
+        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
+        spinner.setAdapter(adapter);
     }
 
     private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
