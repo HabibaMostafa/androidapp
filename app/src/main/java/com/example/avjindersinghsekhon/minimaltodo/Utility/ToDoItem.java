@@ -13,7 +13,7 @@ public class ToDoItem implements Serializable {
     private String mToDoText;
     private String mToDoStatus;
     private boolean mHasReminder;
-    private ArrayList<String> labels;
+    private ArrayList<String> labelList;
     //add description
     private String mToDoDescription;
     private String mToDoLabel;
@@ -32,7 +32,6 @@ public class ToDoItem implements Serializable {
     private static final String TODOLABEL = "todolabel";
     private static final String TODOSTATUS = "todostatus";
 
-
     public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
@@ -42,10 +41,12 @@ public class ToDoItem implements Serializable {
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
-        labels = new ArrayList<String>();
+        labelList = new ArrayList<String>();
+        labelList.add("test");
     }
 
 
+    // this constructor is used
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
         mToDoLabel = jsonObject.getString(TODOLABEL);
@@ -62,6 +63,9 @@ public class ToDoItem implements Serializable {
         if (jsonObject.has(TODODATE)) {
             mToDoDate = new Date(jsonObject.getLong(TODODATE));
         }
+
+        labelList = new ArrayList<String>();
+        labelList.add("test");
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -83,7 +87,9 @@ public class ToDoItem implements Serializable {
 
 
     public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room", true, new Date());
+        this("Clean my room","Sweep and Mop my Room", true, new Date()); //what is this?
+        labelList = new ArrayList<String>();
+        labelList.add("test");
     }
 
 
@@ -98,9 +104,6 @@ public class ToDoItem implements Serializable {
         return mToDoLabel;
     }
     public void setmToDoLabel(String newLabel){this.mToDoLabel = newLabel;}
-
-
-
 
     public String getmToDoDescription() { return mToDoDescription;}
 
@@ -141,6 +144,35 @@ public class ToDoItem implements Serializable {
 
     public UUID getIdentifier() {
         return mTodoIdentifier;
+    }
+
+
+    public void addLabel(String label) {
+
+        if(label == null || this.labelList == null) {
+            return;
+        }
+
+        if(labelList.contains(label) == false) {
+            labelList.add(label);
+        }
+        return;
+    }
+
+    public void removeLabel(String label) {
+        if(label == null || labelList == null) {
+            return;
+        }
+
+
+        if(labelList.contains(label)) {
+            labelList.remove(label);
+        }
+        return;
+    }
+
+    public ArrayList<String> getLabelList() {
+        return this.labelList;
     }
 }
 

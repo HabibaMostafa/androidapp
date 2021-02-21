@@ -20,6 +20,7 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
@@ -251,6 +253,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        TextInputLayout til = (TextInputLayout)findViewById(R.id.toDoCustomTextInput);
 //        til.requestFocus();
         mToDoTextBodyEditText.requestFocus();
+
         mToDoTextBodyEditText.setText(mUserEnteredText);
         mToDoTextBodyLabel.setText(mUserEnteredLabel);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
@@ -481,11 +484,42 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         // populate the spinnerlist
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
+        adapter.insert(" ",0);
         adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
         spinner.setAdapter(adapter);
+
+
+        spinner.setSelection(0, true);
+
+        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(i == 0) {
+                    return;
+                }
+
+                mUserToDoItem.addLabel(labelList.get(i));
+
+                // create button to remove the item
+
+                Log.d("label", mUserToDoItem.getLabelList().toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+        });
+
+
+
+
+
+
     }
 
     private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
