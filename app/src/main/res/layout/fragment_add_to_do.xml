@@ -54,6 +54,67 @@
 
             </LinearLayout>
 
+            <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
+                android:id="@+id/toDoCustomTextInput01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="20dp"
+                app:hintTextAppearance="@style/FloatingLabelTextAppearance">
+
+                <EditText
+                    android:id="@+id/userToDoDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:gravity="start|bottom"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:lines="2"
+                    android:maxLines="6"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/icons" />
+
+            </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/toDoLabelSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
+                    android:id="@+id/toDoLabelSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/userToDoLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginRight="32dp"
+                        android:layout_weight="0"
+                        android:gravity="start|bottom"
+                        android:hint="@string/user_label"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/icons" />
+
+                </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/toDoStatusSection"
@@ -105,61 +166,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/toDoLabelSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="20dp">
-
-                <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
-                    android:id="@+id/toDoLabelSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/userToDoLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginRight="32dp"
-                        android:layout_weight="0"
-                        android:gravity="start|bottom"
-                        android:hint="@string/user_label"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:scrollbars="vertical"
-                        android:textColor="@color/icons" />
-
-                </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
-            </LinearLayout>
-
-
-            <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
-                android:id="@+id/toDoCustomTextInput01"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="20dp"
-                app:hintTextAppearance="@style/FloatingLabelTextAppearance">
-
-                <EditText
-                    android:id="@+id/userToDoDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:gravity="start|bottom"
-                    android:hint="@string/description"
-                    android:inputType="textMultiLine|textCapSentences"
-                    android:lines="2"
-                    android:maxLines="6"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/icons" />
-
-            </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
 
             <LinearLayout
                 android:id="@+id/todoReminderAndDateContainerLayout"

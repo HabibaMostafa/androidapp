@@ -41,6 +41,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -50,11 +51,15 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+
+
+
 
 public class AddToDoFragment extends AppDefaultFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "AddToDoFragment";
@@ -105,10 +110,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String theme;
     AnalyticsApplication app;
 
+    private ArrayList<String> labelList;
+    public static final String LABELFILE = "labels.txt";
+    private StoreRetrieveData labelData;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        Log.d("Tagged", "Ayyyyy tone");
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -465,6 +473,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //                timePickerDialog.show(getFragmentManager(), "TimeFragment");
 //            }
 //        });
+        updateLabelList();
+
 
     }
 
@@ -580,6 +590,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(et.getWindowToken(), 0);
+    }
+
+
+    private void updateLabelList() {
+        labelData = new StoreRetrieveData(getContext());
+        try {
+            labelList = labelData.loadLabels();
+        } catch(Exception e) {
+            Log.d("label", "did not load" + e.toString());
+            labelList = null;
+        }
     }
 
 

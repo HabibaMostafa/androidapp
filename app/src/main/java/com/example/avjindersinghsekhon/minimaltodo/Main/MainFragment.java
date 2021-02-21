@@ -57,7 +57,11 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
+
     private ArrayList<ToDoItem> mToDoItemsArrayList;
+
+    private ArrayList<String> labelList;
+
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
     private MainFragment.BasicListAdapter adapter;
@@ -67,7 +71,9 @@ public class MainFragment extends AppDefaultFragment {
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
     public static final String DATE_TIME_FORMAT_24_HOUR = "MMM d, yyyy  k:mm";
     public static final String FILENAME = "todoitems.json";
+    public static final String LABELFILE = "labels.txt";
     private StoreRetrieveData storeRetrieveData;
+    private StoreRetrieveData labelData;
     public ItemTouchHelper itemTouchHelper;
     private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
     public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
@@ -89,6 +95,8 @@ public class MainFragment extends AppDefaultFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -220,7 +228,54 @@ public class MainFragment extends AppDefaultFragment {
 //        setUpTransitions();
 
 
+
+
+        // label stuff
+        labelData = new StoreRetrieveData(getContext(), LABELFILE);
+        labelList = getLocallyStoredLabels(labelData);
+        // adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
+
+
+        // debug adding labels for now;
+        labelList.add("School");
+        labelList.add("Work");
+        labelList.add("Social");
+
+        // save labels to disk
+
+        try {
+            
+            labelData.saveLabels(labelList);
+        } catch (Exception e) {
+            Log.d("label", e.toString());
+        }
+
+        // for(int i = 0; i < labelList.size(); i++) {
+        //     Log.d("main", labelList.get(i));
+        // }
+
     }
+
+    public static ArrayList<String> getLocallyStoredLabels(StoreRetrieveData data) {
+        ArrayList<String> labels = null;
+
+        // try {
+        //     // items = data.loadFromFile();
+
+        // } catch (IOException | JSONException e) {
+        //     e.printStackTrace();
+        // }
+
+        if(labels == null) {
+            labels = new ArrayList<>();
+        }
+
+        return labels;
+    }
+
+    // public ArrayList<String> getLabelList() {
+    //     return this.labelList;
+    // }
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
         ArrayList<ToDoItem> items = null;
@@ -420,7 +475,6 @@ public class MainFragment extends AppDefaultFragment {
         adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
 
     }
-
 
     public void makeUpItems(ArrayList<ToDoItem> items, int len) {
         for (String testString : testStrings) {

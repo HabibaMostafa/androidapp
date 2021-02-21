@@ -7,10 +7,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import java.util.ArrayList;
+
 public class ToDoItem implements Serializable {
     private String mToDoText;
     private String mToDoStatus;
     private boolean mHasReminder;
+    private ArrayList<String> labels;
     //add description
     private String mToDoDescription;
     private String mToDoLabel;
@@ -39,6 +42,7 @@ public class ToDoItem implements Serializable {
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
+        labels = new ArrayList<String>();
     }
 
 
