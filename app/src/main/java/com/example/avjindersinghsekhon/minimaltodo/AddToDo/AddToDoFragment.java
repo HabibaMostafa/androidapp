@@ -119,6 +119,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static final String LABELFILE = "labels.txt";
     private StoreRetrieveData labelData;
 
+    private static View theView;
+    private static ToDoItem theToDoItem;
+    private static Context theContext;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -489,9 +493,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
+        final Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
         spinner.setAdapter(adapter);
 
+        theView = view;
+        theToDoItem = mUserToDoItem;
+        theContext = getContext();
 
         spinner.setSelection(0, true);
 
@@ -506,19 +513,22 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 mUserToDoItem.addLabel(labelList.get(i));
 
                 // create button to remove the item
+                // addLabelButton(view, mUserToDoItem, labelList.get(i), getContext());
+
+                addLabelButtons(theView, theToDoItem, theContext);
+                
 
                 Log.d("label", mUserToDoItem.getLabelList().toString());
+                spinner.setSelection(0, true);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
 
+            
+
         });
-
-
-
-
 
         addLabelButtons(view, mUserToDoItem, getContext());
     }
@@ -897,10 +907,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private void addLabelButtons(View view, final ToDoItem todo, Context context) {
 
+        if(view == null || todo == null || context == null) {
+            return;
+        }
+
 
         ArrayList<String> labels = todo.getLabelList();
         // labelButtonContainer
         final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
+
+        container.removeAllViews();
+
         // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTEN); 
         // array list of labels assigned to the ToDoItem
         for(final String str: labels) {
@@ -929,8 +946,30 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     }
 
 
-    public void addLabelButton(View view, final ToDoItem todo, Context context) {
+    public void addLabelButton(View view, final ToDoItem todo, final String str, Context context) {
 
+        if(view == null || todo == null || context == null || str== null) {
+            return;
+        }
+
+        final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
+        Button btn = new Button(context);
+        btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        btn.setText(str);
+        btn.setTag(str + "_label_btn");
+        container.addView(btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // remove the label from the toDo item
+
+                todo.removeLabel(str);
+
+                // delete this button
+                container.removeView(v);
+                
+            }
+        });
+        return;
     }
 
 }
