@@ -512,11 +512,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
                 mUserToDoItem.addLabel(labelList.get(i));
 
-                // create button to remove the item
-                // addLabelButton(view, mUserToDoItem, labelList.get(i), getContext());
-
                 addLabelButtons(theView, theToDoItem, theContext);
-                
 
                 Log.d("label", mUserToDoItem.getLabelList().toString());
                 spinner.setSelection(0, true);
