@@ -239,7 +239,10 @@ public class MainFragment extends AppDefaultFragment {
         // debug adding labels for now;
         labelList.add("School");
         labelList.add("Work");
+        labelList.add("Family");
         labelList.add("Social");
+        labelList.add("Health");
+        labelList.add("Personal Finance");
 
         // save labels to disk
 
