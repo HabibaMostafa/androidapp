@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
@@ -519,7 +520,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
-
+        addLabelButtons(view, mUserToDoItem, getContext());
     }
 
     private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
@@ -893,4 +894,43 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static AddToDoFragment newInstance() {
         return new AddToDoFragment();
     }
+
+    private void addLabelButtons(View view, final ToDoItem todo, Context context) {
+
+
+        ArrayList<String> labels = todo.getLabelList();
+        // labelButtonContainer
+        final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
+        // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTEN); 
+        // array list of labels assigned to the ToDoItem
+        for(final String str: labels) {
+            Button btn = new Button(context);
+            btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            btn.setText(str);
+            btn.setTag(str + "_label_btn");
+            container.addView(btn);
+
+
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // remove the label from the toDo item
+
+                    todo.removeLabel(str);
+
+                    // delete this button
+                    container.removeView(v);
+                    
+                }
+            });
+        }
+        
+        return;
+    }
+
+
+    public void addLabelButton(View view, final ToDoItem todo, Context context) {
+
+    }
+
 }

@@ -90,6 +90,18 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp">
 
+                <HorizontalScrollView
+                    android:id="@+id/labelButtonScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/labelButtonContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
                 <LinearLayout
                     android:id="@+id/labelSelection"
                     android:layout_width="match_parent"
