@@ -20,16 +20,25 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
@@ -38,25 +47,36 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
+
+
+
 public class AddToDoFragment extends AppDefaultFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "AddToDoFragment";
     private Date mLastEdited;
 
     private EditText mToDoTextBodyEditText;
+    private EditText mToDoTextBodyLabel;
     private EditText mToDoTextBodyDescription;
+
+    private RadioGroup mToDoStatusGroup;
+    private RadioButton mToDoStatusRadioButton;
 
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
@@ -84,7 +104,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static final String DATE_FORMAT_TIME = "H:m";
 
     private String mUserEnteredText;
+    private String mUserEnteredLabel;
     private String mUserEnteredDescription;
+    private String mUserChosenStatus;
+
+
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
@@ -95,14 +119,27 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String theme;
     AnalyticsApplication app;
 
+    private ArrayList<String> labelList;
+    public static final String LABELFILE = "labels.txt";
+    private StoreRetrieveData labelData;
+
+    private static View theView;
+    private static ToDoItem theToDoItem;
+    private static Context theContext;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
         //Need references to these to change them during light/dark mode
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
+
+
+//        check the radio
+
 
 
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
@@ -133,13 +170,20 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         mUserToDoItem = (ToDoItem) getActivity().getIntent().getSerializableExtra(MainFragment.TODOITEM);
-
         mUserEnteredText = mUserToDoItem.getToDoText();
+        mUserEnteredLabel = mUserToDoItem.getmToDoLabel();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
+        mUserChosenStatus = mUserToDoItem.getmToDoStatus();
 
+
+        // refer to the existing ToDoItem and check the appropriate radio button:
+        checkToDoSavedStatus(view, mUserToDoItem);
+
+        // listens to the radio if it is changed
+        addListenerRadio(view);
 
 //        if(mUserToDoItem.getLastEdited()==null) {
 //            mLastEdited = new Date();
@@ -147,6 +191,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        else{
 //            mLastEdited = mUserToDoItem.getLastEdited();
 //        }
+
+
+
+
 
 
         reminderIconImageButton = (ImageButton) view.findViewById(R.id.userToDoReminderIconImageButton);
@@ -164,6 +212,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mContainerLayout = (LinearLayout) view.findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
+        mToDoTextBodyLabel = (EditText) view.findViewById(R.id.userToDoLabel);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
@@ -176,9 +225,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onClick(View view) {
                 String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
+                String toDoLabelContainer = mToDoTextBodyLabel.getText().toString();
                 String toDoTextBodyDescriptionContainer = mToDoTextBodyDescription.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                CombinationText = "Title : " + toDoTextContainer + "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
+                CombinationText = "Title : " + toDoTextContainer + "\nStatus: "+ mUserChosenStatus + "\nLabel: " + toDoLabelContainer +  "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
                 ClipData clip = ClipData.newPlainText("text", CombinationText);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
@@ -212,14 +262,15 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        TextInputLayout til = (TextInputLayout)findViewById(R.id.toDoCustomTextInput);
 //        til.requestFocus();
         mToDoTextBodyEditText.requestFocus();
+
         mToDoTextBodyEditText.setText(mUserEnteredText);
+        mToDoTextBodyLabel.setText(mUserEnteredLabel);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
+
         InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(mToDoTextBodyEditText, InputMethodManager.SHOW_IMPLICIT);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         mToDoTextBodyEditText.setSelection(mToDoTextBodyEditText.length());
-
-
         mToDoTextBodyEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -234,6 +285,27 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             public void afterTextChanged(Editable s) {
             }
         });
+
+
+        mToDoTextBodyLabel.setText(mUserEnteredLabel);
+        mToDoTextBodyLabel.setSelection(mUserEnteredLabel.length());
+        mToDoTextBodyLabel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mUserEnteredLabel = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
         mToDoTextBodyDescription.setSelection(mToDoTextBodyDescription.length());
         mToDoTextBodyDescription.addTextChangedListener(new TextWatcher() {
@@ -415,10 +487,100 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //                timePickerDialog.show(getFragmentManager(), "TimeFragment");
 //            }
 //        });
+        updateLabelList();
+//        List<String> spinnerArr = new ArrayList<String>()
+
+
+        // populate the spinnerlist
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
+        adapter.insert(" ",0);
+        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
+        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
+        spinner.setAdapter(adapter);
+
+        theView = view;
+        theToDoItem = mUserToDoItem;
+        theContext = getContext();
+
+        spinner.setSelection(0, true);
+
+        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(i == 0) {
+                    return;
+                }
+
+                mUserToDoItem.addLabel(labelList.get(i));
+
+                addLabelButtons(theView, theToDoItem, theContext);
+
+                Log.d("label", mUserToDoItem.getLabelList().toString());
+                spinner.setSelection(0, true);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+            
+
+        });
+
+        addLabelButtons(view, mUserToDoItem, getContext());
+    }
+
+    private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
+        RadioGroup rg = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        rg.clearCheck();
+
+        //default will be set to incomplete
+        rg.check(R.id.toDoRadioIncomplete);
+
+        String status = mUserToDoItem.getmToDoStatus();
+
+        if(status.equals("Complete")) {
+            rg.check(R.id.toDoRadioComplete);
+        }
+
+        else if (status.equals("In Progress")) {
+            rg.check(R.id.toDoRadioInProgress);
+        }
+
+//        else if (status.equals("Incomplete")) {
+//            rg.check(R.id.toDoRadioIncomplete);
+//        }
+
+
+        return;
+    }
+
+    private void addListenerRadio(View view) {
+        mToDoStatusGroup = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        int selected = mToDoStatusGroup.getCheckedRadioButtonId();
+        mToDoStatusRadioButton = (RadioButton) view.findViewById(selected);
+//        mUserChosenStatus = (String) mToDoStatusRadioButton.getText();
+
+        mToDoStatusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
+                boolean isSelected = checkedRadioBtn.isChecked();
+
+                if(isSelected) {
+                    mUserChosenStatus = (String)checkedRadioBtn.getText();
+
+                }
+            }
+        });
+
+
 
         // call for recurrence event
-
-        recurBtn = (Button) view.findViewById(R.id.recrBtn);
+        recurBtn = (Button) view.findViewById(R.id.recurbtn);
 
         recurBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -428,6 +590,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 startActivity(intent);
             }
         });
+        return;
+
 
     }
 
@@ -497,6 +661,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(et.getWindowToken(), 0);
+    }
+
+
+    private void updateLabelList() {
+        labelData = new StoreRetrieveData(getContext());
+        try {
+            labelList = labelData.loadLabels();
+        } catch(Exception e) {
+            Log.d("label", "did not load" + e.toString());
+            labelList = null;
+        }
     }
 
 
@@ -608,10 +783,25 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
             String capitalizedString = Character.toUpperCase(mUserEnteredText.charAt(0)) + mUserEnteredText.substring(1);
             mUserToDoItem.setToDoText(capitalizedString);
+
+
+            Log.d(TAG, "Label: " + mUserEnteredLabel);
+            mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
+
+            Log.d(TAG, "Status: " + mUserChosenStatus);
+            mUserToDoItem.setmToDoStatus(mUserChosenStatus);
+
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
         } else {
             mUserToDoItem.setToDoText(mUserEnteredText);
+
+            Log.d(TAG, "Status: " + mUserChosenStatus);
+            mUserToDoItem.setmToDoStatus(mUserChosenStatus);
+
+            Log.d(TAG, "Label: " + mUserEnteredLabel);
+            mUserToDoItem.setmToDoLabel(mUserEnteredLabel);
+
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
         }
@@ -730,4 +920,72 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static AddToDoFragment newInstance() {
         return new AddToDoFragment();
     }
+
+    private void addLabelButtons(View view, final ToDoItem todo, Context context) {
+
+        if(view == null || todo == null || context == null) {
+            return;
+        }
+
+
+        ArrayList<String> labels = todo.getLabelList();
+        // labelButtonContainer
+        final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
+
+        container.removeAllViews();
+
+        // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTEN); 
+        // array list of labels assigned to the ToDoItem
+        for(final String str: labels) {
+            Button btn = new Button(context);
+            btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            btn.setText(str);
+            btn.setTag(str + "_label_btn");
+            container.addView(btn);
+
+
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // remove the label from the toDo item
+
+                    todo.removeLabel(str);
+
+                    // delete this button
+                    container.removeView(v);
+                    
+                }
+            });
+        }
+        
+        return;
+    }
+
+
+    public void addLabelButton(View view, final ToDoItem todo, final String str, Context context) {
+
+        if(view == null || todo == null || context == null || str== null) {
+            return;
+        }
+
+        final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
+        Button btn = new Button(context);
+        btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        btn.setText(str);
+        btn.setTag(str + "_label_btn");
+        container.addView(btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // remove the label from the toDo item
+
+                todo.removeLabel(str);
+
+                // delete this button
+                container.removeView(v);
+                
+            }
+        });
+        return;
+    }
+
 }
