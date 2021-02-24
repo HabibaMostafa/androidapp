@@ -45,6 +45,7 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -92,6 +93,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Button mChooseDateButton;
     private Button mChooseTimeButton;
     private Button mCopyClipboard;
+
+    //this is for add recurrance
+    private Button recurBtn;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -487,92 +491,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        List<String> spinnerArr = new ArrayList<String>()
 
 
-        // populate the spinnerlist
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
-        adapter.insert(" ",0);
-        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
-        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        final Spinner spinner = (Spinner)view.findViewById(R.id.labelSpinner);
-        spinner.setAdapter(adapter);
+        recurBtn = (Button) view.findViewById(R.id.recrBtn);
 
-        theView = view;
-        theToDoItem = mUserToDoItem;
-        theContext = getContext();
-
-        spinner.setSelection(0, true);
-
-        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+        recurBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onClick(View view) {
 
-                if(i == 0) {
-                    return;
-                }
-
-                mUserToDoItem.addLabel(labelList.get(i));
-
-                addLabelButtons(theView, theToDoItem, theContext);
-
-                Log.d("label", mUserToDoItem.getLabelList().toString());
-                spinner.setSelection(0, true);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-
-            
-
-        });
-
-        addLabelButtons(view, mUserToDoItem, getContext());
-    }
-
-    private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
-        RadioGroup rg = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
-        rg.clearCheck();
-
-        //default will be set to incomplete
-        rg.check(R.id.toDoRadioIncomplete);
-
-        String status = mUserToDoItem.getmToDoStatus();
-
-        if(status.equals("Complete")) {
-            rg.check(R.id.toDoRadioComplete);
-        }
-
-        else if (status.equals("In Progress")) {
-            rg.check(R.id.toDoRadioInProgress);
-        }
-
-//        else if (status.equals("Incomplete")) {
-//            rg.check(R.id.toDoRadioIncomplete);
-//        }
-
-
-        return;
-    }
-
-    private void addListenerRadio(View view) {
-        mToDoStatusGroup = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
-        int selected = mToDoStatusGroup.getCheckedRadioButtonId();
-        mToDoStatusRadioButton = (RadioButton) view.findViewById(selected);
-//        mUserChosenStatus = (String) mToDoStatusRadioButton.getText();
-
-        mToDoStatusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
-                boolean isSelected = checkedRadioBtn.isChecked();
-
-                if(isSelected) {
-                    mUserChosenStatus = (String)checkedRadioBtn.getText();
-
-                }
+                Intent intent = new Intent(getActivity(), RecurringActivity.class);
+                startActivity(intent);
             }
         });
         return;
+
+
     }
 
     private void setDateAndTimeEditText() {
