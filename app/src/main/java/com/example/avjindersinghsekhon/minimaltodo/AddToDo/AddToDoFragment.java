@@ -418,7 +418,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         // call for recurrence event
 
-        recurBtn = (Button) view.findViewById(R.id.recurbtn);
+        recurBtn = (Button) view.findViewById(R.id.recrBtn);
 
         recurBtn.setOnClickListener(new View.OnClickListener() {
             @Override
