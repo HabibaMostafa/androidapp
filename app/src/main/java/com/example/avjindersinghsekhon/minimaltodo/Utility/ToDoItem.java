@@ -1,17 +1,25 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import java.util.ArrayList;
+
 public class ToDoItem implements Serializable {
     private String mToDoText;
+    private String mToDoStatus;
     private boolean mHasReminder;
+    private ArrayList<String> labelList;
     //add description
     private String mToDoDescription;
+    private String mToDoLabel;
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -24,24 +32,40 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
+    private static final String TODOLABEL = "todolabel"; // unused now, just for testing
+    private static final String TODOSTATUS = "todostatus";
+    private static final String TODOLABELS = "todolabels";
 
-
-    public ToDoItem(String todoBody,String tododescription,  boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
+        mToDoStatus = "";
+        mToDoLabel = "";
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
+        labelList = new ArrayList<String>();
     }
 
+
+    // this constructor is used
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
+        mToDoLabel = jsonObject.getString(TODOLABEL);
         mToDoDescription = jsonObject.getString(TODODESCRIPTION);
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
-
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
+        mToDoStatus = jsonObject.getString(TODOSTATUS);
+
+//        String test = (jsonObject.get(TODOLABELS)).toString();
+        labelList = new ArrayList<String>();
+        JSONArray jsonArray = (JSONArray)(jsonObject.get(TODOLABELS));
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject aLabel = (JSONObject)jsonArray.get(i);
+            labelList.add(aLabel.getString("name"));
+        }
 
 //        if(jsonObject.has(TODOLASTEDITED)){
 //            mLastEdited = new Date(jsonObject.getLong(TODOLASTEDITED));
@@ -49,12 +73,15 @@ public class ToDoItem implements Serializable {
         if (jsonObject.has(TODODATE)) {
             mToDoDate = new Date(jsonObject.getLong(TODODATE));
         }
+
     }
 
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TODOTEXT, mToDoText);
         jsonObject.put(TODOREMINDER, mHasReminder);
+        jsonObject.put(TODOLABEL, mToDoLabel);
+        jsonObject.put(TODOSTATUS, mToDoStatus);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
@@ -63,13 +90,39 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOCOLOR, mTodoColor);
         jsonObject.put(TODOIDENTIFIER, mTodoIdentifier.toString());
 
+        // put label array into the JSON obj
+        JSONArray arr = new JSONArray();
+        for(String str: labelList) {
+            JSONObject labelsObj = new JSONObject();
+            labelsObj.put("name",str);
+            arr.put(labelsObj);
+        }
+
+        jsonObject.put(TODOLABELS, arr);
+
+
+
         return jsonObject;
     }
 
 
     public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room", true, new Date());
+        this("Clean my room","Sweep and Mop my Room", true, new Date()); //what is this?
+        labelList = new ArrayList<String>();
     }
+
+
+    public String getmToDoStatus() {
+        return mToDoStatus;
+    }
+    public void setmToDoStatus(String newStatus) {
+        this.mToDoStatus = newStatus;
+    }
+
+    public String getmToDoLabel() {
+        return mToDoLabel;
+    }
+    public void setmToDoLabel(String newLabel){this.mToDoLabel = newLabel;}
 
     public String getmToDoDescription() { return mToDoDescription;}
 
@@ -110,6 +163,35 @@ public class ToDoItem implements Serializable {
 
     public UUID getIdentifier() {
         return mTodoIdentifier;
+    }
+
+
+    public void addLabel(String label) {
+
+        if(label == null || this.labelList == null) {
+            return;
+        }
+
+        if(labelList.contains(label) == false) {
+            labelList.add(label);
+        }
+        return;
+    }
+
+    public void removeLabel(String label) {
+        if(label == null || labelList == null) {
+            return;
+        }
+
+
+        if(labelList.contains(label)) {
+            labelList.remove(label);
+        }
+        return;
+    }
+
+    public ArrayList<String> getLabelList() {
+        return this.labelList;
     }
 }
 
