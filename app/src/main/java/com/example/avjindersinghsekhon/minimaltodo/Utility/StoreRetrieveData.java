@@ -1,6 +1,8 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
 import android.content.Context;
+import android.util.Log;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,12 @@ public class StoreRetrieveData {
     public StoreRetrieveData(Context context, String filename) {
         mContext = context;
         mFileName = filename;
+    }
+
+    // for labels
+    public StoreRetrieveData(Context context) {
+        mContext = context;
+        mFileName = "labels.txt";
     }
 
     public static JSONArray toJSONArray(ArrayList<ToDoItem> items) throws JSONException {
@@ -79,4 +87,61 @@ public class StoreRetrieveData {
         return items;
     }
 
+    // save the created labels to file
+    public void saveLabels(ArrayList<String> labels) throws JSONException, IOException {
+        FileOutputStream fileOutputStream;
+        OutputStreamWriter outputStreamWriter;
+        fileOutputStream = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
+        outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+
+        String output = "";
+        for(int i = 0; i < labels.size(); i++) {
+            output += labels.get(i) + ",";
+        }
+
+        outputStreamWriter.write(output);
+        outputStreamWriter.close();
+        fileOutputStream.close();
+        return;
+    }
+
+    //load saved labels from file
+    public ArrayList<String> loadLabels() throws IOException, JSONException {
+
+        ArrayList<String> labels = new ArrayList<>();
+        BufferedReader bufferedReader = null;
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = mContext.openFileInput(mFileName);
+            StringBuilder builder = new StringBuilder();
+            String line;
+            bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+            }
+
+            // strings are separated by commas
+            String[] temp = builder.toString().split("\\,");
+            for(int i = 0; i < temp.length; i++) {
+                // Log.d("label", temp[i]);
+                labels.add(temp[i]);
+            }
+
+        } catch (FileNotFoundException fnfe) {
+            Log.d("loadLabels()", fnfe.toString());
+            //do nothing about it
+            //file won't exist first time app is run
+        } finally {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+
+        }
+        return labels;
+    }
+
+    
 }
