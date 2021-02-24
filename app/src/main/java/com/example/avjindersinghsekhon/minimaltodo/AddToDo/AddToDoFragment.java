@@ -45,6 +45,7 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -92,6 +93,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Button mChooseDateButton;
     private Button mChooseTimeButton;
     private Button mCopyClipboard;
+
+    //this is for add recurrance
+    private Button recurBtn;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -572,7 +576,23 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 }
             }
         });
+
+
+
+        // call for recurrence event
+        recurBtn = (Button) view.findViewById(R.id.recurbtn);
+
+        recurBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), RecurringActivity.class);
+                startActivity(intent);
+            }
+        });
         return;
+
+
     }
 
     private void setDateAndTimeEditText() {
