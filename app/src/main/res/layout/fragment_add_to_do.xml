@@ -75,8 +75,8 @@
                             android:id="@+id/userToDoDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="36dp"
-                            android:layout_marginRight="36dp"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginRight="32dp"
                             android:gravity="start|bottom"
                             android:hint="@string/description"
                             android:inputType="textMultiLine|textCapSentences"
@@ -113,7 +113,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="20dp"
-                            android:layout_marginLeft="2dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -137,9 +136,6 @@
                             android:id="@+id/toDoStatusSection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="36dp"
-                            android:layout_marginTop="30dp"
-                            android:layout_marginRight="36dp"
                             android:orientation="vertical"
                             android:paddingTop="20dp">
 
