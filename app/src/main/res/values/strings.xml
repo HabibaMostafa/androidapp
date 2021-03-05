@@ -19,6 +19,7 @@
     <string name="night_mode_on_summary">Night mode is on</string>
     <string name="night_mode_off_summary">Night mode is off</string>
     <string name="description">Description</string>
+    <string name="user_label">Label</string>
 
     <string-array name="snooze_options">
         <item>10 Minutes</item>
@@ -29,4 +30,25 @@
     <string name="snooze">Snooze</string>
     <string name="remove">Remove</string>
     <string name="todo_error">Please enter a Todo</string>
+    <string name="recurring_event">Recurring Event</string>
+    <string name="button">Button</string>
+    <string name="button_rec">Button</string>
+    <string name="Recurtextview">TextView</string>
+    <string name="Recurrence_Text">Custom Recurrence</string>
+    <string name="hint" />
+    <string name="repeat_every">Repeat Every:</string>
+    <string name="num">num</string>
+    <string name="end">End</string>
+    <string name="done">Done</string>
+    <string name="repeat_on">Repeat On:</string>
+    <string name="checkbox">CheckBox</string>
+    <string name="never">Never</string>
+    <string name="on">On</string>
+    <string name="after">After</string>
+    <string name="cancel">Cancel</string>
+    <string name="text_view">Custom Recurrence</string>
+    <string name="ends">Ends</string>
+    <string name="occurrences">Occurrences</string>
+    <string name="add_recurrence">Add Recurrences</string>
+    <string name="select_day">Select Days</string>
 </resources>
