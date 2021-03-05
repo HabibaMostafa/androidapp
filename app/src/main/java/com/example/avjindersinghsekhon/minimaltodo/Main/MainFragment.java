@@ -43,7 +43,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupp
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
-import com.example.avjindersinghsekhon.minimaltodo.calendarViewActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Calendar.calendarViewActivity;
 
 import org.json.JSONException;
 
