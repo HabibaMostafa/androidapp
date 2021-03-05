@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupp
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
+import com.example.avjindersinghsekhon.minimaltodo.calendarViewActivity;
 
 import org.json.JSONException;
 
@@ -57,6 +59,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
+    private Button btngocalendar;
 
     private ArrayList<ToDoItem> mToDoItemsArrayList;
 
@@ -146,8 +149,20 @@ public class MainFragment extends AppDefaultFragment {
 //        makeUpItems(mToDoItemsArrayList, testStrings.length);
 
 
+        //initialize layout features.
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
+        //Button used to send user to calendar view - Alex
+        btngocalendar = (Button) view.findViewById(R.id.btngocalendar);
+
+        //OnClickListener to attach send function to Calendar view button. - Alex
+        btngocalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),calendarViewActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mAddToDoItemFAB.setOnClickListener(new View.OnClickListener() {
 

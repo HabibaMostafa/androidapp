@@ -11,7 +11,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/CustomStyle.DarkTheme">
-        <activity android:name=".Reminder.RecurringActivity"></activity>
+        <activity android:name=".calendarViewActivity"></activity>
+        <activity android:name=".Reminder.RecurringActivity" />
         <activity
             android:name=".Main.MainActivity"
             android:label="@string/app_name"
