@@ -23,6 +23,7 @@ A fully Material ToDo app with minimal features, just enough to be useful.
 
 
 
+
 ## App Icon
 Designed by [Christopher Gundersen](cgundersen2020@gmail.com)
 ## Translations

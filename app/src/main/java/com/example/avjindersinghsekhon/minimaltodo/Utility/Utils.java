@@ -8,7 +8,7 @@ import com.example.avjindersinghsekhon.minimaltodo.R;
 
 public class Utils {
 
-
+    // used for styling the toolbar
     public static int getToolbarHeight(Context context) {
         final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
