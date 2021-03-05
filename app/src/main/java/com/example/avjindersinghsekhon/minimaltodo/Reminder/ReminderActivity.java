@@ -11,18 +11,18 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity
 import com.example.avjindersinghsekhon.minimaltodo.R;
 
 public class ReminderActivity extends AppDefaultActivity {
-    private SwitchCompat recurSwitch;
+//    private SwitchCompat recurSwitch;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        recurSwitch = (SwitchCompat)findViewById(R.id.switch_recurrent);
-        recurSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recurActivity();
-            }
-        });
+//        recurSwitch = (SwitchCompat)findViewById(R.id.switch_recurrent);
+//        recurSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                recurActivity();
+//            }
+//        });
     }
 
     public void recurActivity(){

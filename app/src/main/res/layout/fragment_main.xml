@@ -35,6 +35,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <!--Temporary button for displaying the Calendar View - Alex-->
+            <Button
+                android:id="@+id/btngocalendar"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Calendar!"
+                app:layout_anchor="@id/myCoordinatorLayout"
+                app:layout_anchorGravity="bottom|left|end" />
+
         </LinearLayout>
 
 
@@ -59,7 +69,6 @@
             android:layout_margin="16dp"
             app:layout_anchor="@id/myCoordinatorLayout"
             app:layout_anchorGravity="bottom|right|end"
-
             />
 
 

@@ -490,7 +490,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         updateLabelList();
 //        List<String> spinnerArr = new ArrayList<String>()
 
-
         // populate the spinnerlist
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
         adapter.insert(" ",0);
@@ -526,61 +525,16 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
             }
 
-            
+
 
         });
 
         addLabelButtons(view, mUserToDoItem, getContext());
-    }
-
-    private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
-        RadioGroup rg = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
-        rg.clearCheck();
-
-        //default will be set to incomplete
-        rg.check(R.id.toDoRadioIncomplete);
-
-        String status = mUserToDoItem.getmToDoStatus();
-
-        if(status.equals("Complete")) {
-            rg.check(R.id.toDoRadioComplete);
-        }
-
-        else if (status.equals("In Progress")) {
-            rg.check(R.id.toDoRadioInProgress);
-        }
-
-//        else if (status.equals("Incomplete")) {
-//            rg.check(R.id.toDoRadioIncomplete);
-//        }
-
-
-        return;
-    }
-
-    private void addListenerRadio(View view) {
-        mToDoStatusGroup = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
-        int selected = mToDoStatusGroup.getCheckedRadioButtonId();
-        mToDoStatusRadioButton = (RadioButton) view.findViewById(selected);
-//        mUserChosenStatus = (String) mToDoStatusRadioButton.getText();
-
-        mToDoStatusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
-                boolean isSelected = checkedRadioBtn.isChecked();
-
-                if(isSelected) {
-                    mUserChosenStatus = (String)checkedRadioBtn.getText();
-
-                }
-            }
-        });
 
 
 
-        // call for recurrence event
-        recurBtn = (Button) view.findViewById(R.id.recurbtn);
+
+        recurBtn = (Button) view.findViewById(R.id.recrBtn);
 
         recurBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -590,10 +544,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 startActivity(intent);
             }
         });
+
+
+
+
+
         return;
 
 
     }
+
+
+
 
     private void setDateAndTimeEditText() {
 
@@ -987,5 +949,52 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
         return;
     }
+
+    private void addListenerRadio(View view) {
+
+        mToDoStatusGroup = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        int selected = mToDoStatusGroup.getCheckedRadioButtonId();
+        mToDoStatusRadioButton = (RadioButton) view.findViewById(selected);
+//        mUserChosenStatus = (String) mToDoStatusRadioButton.getText();
+
+        mToDoStatusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
+                boolean isSelected = checkedRadioBtn.isChecked();
+
+                if(isSelected) {
+                    mUserChosenStatus = (String)checkedRadioBtn.getText();
+
+                }
+            }
+        });
+        return;
+    }
+    private void checkToDoSavedStatus(View view, ToDoItem mUserToDoItem) {
+        RadioGroup rg = (RadioGroup) view.findViewById(R.id.toDoStatusGroup);
+        rg.clearCheck();
+
+        //default will be set to incomplete
+        rg.check(R.id.toDoRadioIncomplete);
+
+        String status = mUserToDoItem.getmToDoStatus();
+
+        if(status.equals("Complete")) {
+            rg.check(R.id.toDoRadioComplete);
+        }
+
+        else if (status.equals("In Progress")) {
+            rg.check(R.id.toDoRadioInProgress);
+        }
+
+//        else if (status.equals("Incomplete")) {
+//            rg.check(R.id.toDoRadioIncomplete);
+//        }
+
+
+        return;
+    }
+
 
 }
