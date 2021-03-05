@@ -1,5 +1,5 @@
 package com.example.avjindersinghsekhon.minimaltodo.About;
-
+//Test comment
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
