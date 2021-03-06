@@ -60,9 +60,12 @@ public class calendarViewActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView CalendarView, int year, int month, int dayOfMonth) {
 
-
 //                String date = year + "/" + month + "/"+ dayOfMonth ;
 //                Log.d(TAG, "onSelectedDayChange: yyyy/mm/dd:" + date);
+//                Toast toast = Toast.makeText(getContext(), "Hii", LENGTH_LONG).show();
+//                Intent intent = new Intent(calendarViewActivity.this, MainFragment.class);
+//                intent.putExtra("date",date);
+//                startActivity(intent);
 
                 Context context;
                 context = getApplicationContext();
@@ -78,14 +81,9 @@ public class calendarViewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-
-
+                //format the string to display to the user
                 CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, dayOfMonth, year);
 
-
-
-                //CharSequence text = Integer.toString(year) + " " + Integer.toString(month) + " " + Integer.toString(dayOfMonth);
                 // cancel the previous toast if it exists
                 if(toast != null) {
                     toast.cancel();
@@ -94,15 +92,10 @@ public class calendarViewActivity extends AppCompatActivity {
                 // create the toast and set the text and duration
                 toast = Toast.makeText(context, text, duration);
 
-
                 //displays the message at the bottom
                 toast.show();
 
 
-//                Toast toast = Toast.makeText(getContext(), "Hii", LENGTH_LONG).show();
-//                Intent intent = new Intent(calendarViewActivity.this, MainFragment.class);
-//                intent.putExtra("date",date);
-//                startActivity(intent);
             }
         });
     }
