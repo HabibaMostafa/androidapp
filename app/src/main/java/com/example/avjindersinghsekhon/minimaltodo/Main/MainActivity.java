@@ -12,6 +12,7 @@ import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Calendar.calendarViewActivity;
 
 public class MainActivity extends AppDefaultActivity {
 
@@ -45,6 +46,12 @@ public class MainActivity extends AppDefaultActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.menuCalendarItem:
+                Intent newIntent = new Intent(this, calendarViewActivity.class);
+                startActivity(newIntent);
+                return true;
+
             case R.id.aboutMeMenuItem:
                 Intent i = new Intent(this, AboutActivity.class);
                 startActivity(i);
@@ -69,6 +76,8 @@ public class MainActivity extends AppDefaultActivity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+
+
 
             default:
                 return super.onOptionsItemSelected(item);
