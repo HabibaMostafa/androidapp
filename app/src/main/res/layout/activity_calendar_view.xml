@@ -3,15 +3,46 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnReturn"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Back" />
+        android:layout_gravity="center_horizontal"
+        android:text="Calender View"
+        android:textSize="35sp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        />
 
-    <CalendarView
-        android:id="@+id/calendarView"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/mdtp_transparent_black"
+            android:background="#D0DFEF"
+            android:text="Back" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_calender"
+        >
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 </LinearLayout>
