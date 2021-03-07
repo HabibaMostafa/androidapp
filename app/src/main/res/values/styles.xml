@@ -34,9 +34,9 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <!--color of thumb when inactive-->
-        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <item name="colorSwitchThumbNormal">@color/mdtp_white</item>
         <!--Inactive track color-->
-        <item name="android:colorForeground">@color/grey600</item>
+        <item name="android:colorForeground">@color/mdtp_white</item>
     </style>
 
     <style name="PopupMenuLight" parent="Widget.AppCompat.PopupMenu">
@@ -45,9 +45,11 @@
 
     <style name="OverflowThreeDotsWhite" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_menu_overflow_light</item>
-
     </style>
 
+    <style name="CalendarWhite" parent="Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_calendar_white_24dp</item>
+    </style>
 
     <style name="ToolBarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextAppearance">@style/ToolbarTitleTextAppearanceLight</item>

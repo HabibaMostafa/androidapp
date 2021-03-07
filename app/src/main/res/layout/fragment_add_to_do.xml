@@ -40,8 +40,8 @@
 
                     <EditText
                         android:id="@+id/userToDoEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_width="338dp"
+                        android:layout_height="63dp"
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="32dp"
                         android:gravity="start|bottom"
