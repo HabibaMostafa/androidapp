@@ -77,8 +77,6 @@ public class MainActivity extends AppDefaultActivity {
                 startActivity(intent);
                 return true;
 
-
-
             default:
                 return super.onOptionsItemSelected(item);
         }
