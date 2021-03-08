@@ -103,6 +103,7 @@
 
     <style name="CustomDialog" parent="Base.Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/primary</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="CustomSwitch" parent="Theme.AppCompat.Light.NoActionBar">
@@ -125,6 +126,12 @@
     
     <style name="FloatingLabelTextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CalenderStyle">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">20sp</item>
+
     </style>
 
     <!--<style name="UnderlineSpinner" parent="@style/ThemeOverlay.AppCompat.ActionBar">-->
