@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="Calendar!"
+                android:textColor="#FFF"
                 app:layout_anchor="@id/myCoordinatorLayout"
                 app:layout_anchorGravity="bottom|left|end" />
 
