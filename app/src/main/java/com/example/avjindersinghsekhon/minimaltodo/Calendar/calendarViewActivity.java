@@ -98,18 +98,23 @@ public class calendarViewActivity extends AppCompatActivity {
                 context = getApplicationContext();
                 int duration = LENGTH_LONG;
 
-                //Convert the numerical month to it's full name
-                SimpleDateFormat parsedMonth = new SimpleDateFormat("MM");
-                SimpleDateFormat rawMonth = new SimpleDateFormat("MMMM");
-                String strMonth ="";
-                try {
-                    strMonth = rawMonth.format(parsedMonth.parse(Integer.toString(month+1)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
 
-                //format the string to display to the user
-                CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, dayOfMonth, year);
+
+//                //Convert the numerical month to it's full name
+//                SimpleDateFormat parsedMonth = new SimpleDateFormat("MM");
+//                SimpleDateFormat rawMonth = new SimpleDateFormat("MMMM");
+//                String strMonth ="";
+//                try {
+//                    strMonth = rawMonth.format(parsedMonth.parse(Integer.toString(month+1)));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                //format the string to display to the user
+//                CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, dayOfMonth, year);
+
+                CharSequence convertedDate = convertDate(dayOfMonth, month, year);
+                Log.d(TAG, Integer.toString(month));
 
                 // cancel the previous toast if it exists
                 if(toast != null) {
@@ -117,16 +122,15 @@ public class calendarViewActivity extends AppCompatActivity {
                 }
 
                 // create the toast and set the text and duration
-                toast = Toast.makeText(context, text, duration);
+                toast = Toast.makeText(context, convertedDate, duration);
 
                 //displays the message at the bottom
                 toast.show();
-
-
             }
         });
     }
 
+<<<<<<< HEAD
     /*
     * Can be used to return to the home
     * */
@@ -147,5 +151,28 @@ public class calendarViewActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+=======
+
+    CharSequence convertDate(int day, int month, int year) {
+        CharSequence convertedDate = "";
+
+        //Convert the numerical month to it's full name
+        SimpleDateFormat parsedMonth = new SimpleDateFormat("MM");
+        SimpleDateFormat rawMonth = new SimpleDateFormat("MMMM");
+        String strMonth ="";
+        try {
+            // plus one because month starts at 0 for january, but SimpleDateFormat uses "1" for Januarya
+            strMonth = rawMonth.format(parsedMonth.parse(Integer.toString(month+1)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //format the string to display to the user
+        CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, day, year);
+        convertedDate = text;
+
+
+        return convertedDate;
+>>>>>>> 7b9aee725a2232fdc8cf4c8c6b9d5c7077a79ba5
     }
 }
