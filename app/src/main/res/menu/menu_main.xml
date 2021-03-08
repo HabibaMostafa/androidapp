@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".AddToDo.AddToDoActivity">
 
-    <item android:title="Calendar"
+    <item
+        android:title="Calendar"
+        android:icon="@drawable/ic_calendar_white_24dp"
         android:id="@+id/menuCalendarItem"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         />
-
 
     <item
         android:id="@+id/preferences"
