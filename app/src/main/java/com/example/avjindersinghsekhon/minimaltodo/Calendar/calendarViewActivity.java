@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.Calendar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,9 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.Toast;
 
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
+
 
 public class calendarViewActivity extends AppCompatActivity {
 
@@ -18,12 +24,34 @@ public class calendarViewActivity extends AppCompatActivity {
     private  static final String TAG = "calendarViewActivity";
     private CalendarView mCalendarView;
     private Button btnReturn;
+    private boolean test;
+    Toast toast = null;
+    CharSequence text;
 
     //when activity is called and created.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_view);
+        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+
+        Intent incoming = getIntent();
+        boolean success = incoming.getBooleanExtra("success",false);
+
+        test = success;
+
+        if (success && mCalendarView != null){
+            text = String.format("Success");
+        } else {
+            text = String.format("Fail");
+        }
+
+        Context context = getApplicationContext();
+        int duration = LENGTH_LONG;
+        if(toast != null) { toast.cancel(); }
+        toast = Toast.makeText(context, text, duration);
+        toast.show();
+
 
         //Button to return to main application page
         btnReturn = (Button) findViewById(R.id.btnReturn);

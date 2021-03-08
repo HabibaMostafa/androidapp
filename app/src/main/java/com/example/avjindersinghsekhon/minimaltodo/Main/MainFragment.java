@@ -94,6 +94,7 @@ public class MainFragment extends AppDefaultFragment {
             "Get car washed",
             "Get my dry cleaning"
     };
+    public boolean success = true;
 
 
     @Override
@@ -155,11 +156,16 @@ public class MainFragment extends AppDefaultFragment {
         //Button used to send user to calendar view - Alex
         btngocalendar = (Button) view.findViewById(R.id.btngocalendar);
 
+        //Intent incoming = getIntent();
+        //String date = incoming.getStringExtra("date");
+
+
         //OnClickListener to attach send function to Calendar view button. - Alex
         btngocalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),calendarViewActivity.class);
+                intent.putExtra("success",success);
                 startActivity(intent);
             }
         });
