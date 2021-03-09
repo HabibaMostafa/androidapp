@@ -143,9 +143,9 @@
                                     android:layout_width="282dp"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
-                                    android:background="#4A4A4A"
                                     android:drawableEnd="@android:drawable/arrow_down_float"
                                     android:drawableRight="@android:drawable/arrow_down_float"
+                                    android:background="#4A4A4A"
                                     android:spinnerMode="dropdown" />
 
 
