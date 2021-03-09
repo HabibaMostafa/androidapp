@@ -98,6 +98,7 @@
     </style>
 
 
+
     <style name="AppTheme.ToolBarPadding" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="toolbarStyle">@style/myToolBarStyle</item>
     </style>
@@ -140,5 +141,9 @@
         <!--<item name="android:spinnerStyle">?android:attr/spinnerItemStyle</item>-->
 
     <!--</style>-->
+    <style name="cal_week_col">
+        <item name="android:textColor">#FFC107</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
 </resources>
