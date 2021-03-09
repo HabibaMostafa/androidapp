@@ -130,7 +130,6 @@ public class calendarViewActivity extends AppCompatActivity {
         });
     }
 
-<<<<<<< HEAD
     /*
     * Can be used to return to the home
     * */
@@ -151,7 +150,7 @@ public class calendarViewActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-=======
+    }
 
     CharSequence convertDate(int day, int month, int year) {
         CharSequence convertedDate = "";
@@ -170,9 +169,6 @@ public class calendarViewActivity extends AppCompatActivity {
         //format the string to display to the user
         CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, day, year);
         convertedDate = text;
-
-
         return convertedDate;
->>>>>>> 7b9aee725a2232fdc8cf4c8c6b9d5c7077a79ba5
     }
 }
