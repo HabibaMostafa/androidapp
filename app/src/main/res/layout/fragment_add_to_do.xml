@@ -138,9 +138,9 @@
                                     android:layout_width="282dp"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
-                                    android:background="#4A4A4A"
                                     android:drawableEnd="@android:drawable/arrow_down_float"
                                     android:drawableRight="@android:drawable/arrow_down_float"
+                                    android:background="#4A4A4A"
                                     android:spinnerMode="dropdown" />
 
 
@@ -159,7 +159,7 @@
                                 <TextView
                                     android:id="@+id/toDoStatusTitle"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:paddingLeft="5dp"
                                     android:text="Status"
                                     android:textAppearance="@style/ToolbarTitleTextAppearanceDark"
