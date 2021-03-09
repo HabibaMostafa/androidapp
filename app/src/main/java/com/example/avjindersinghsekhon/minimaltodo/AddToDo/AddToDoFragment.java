@@ -19,10 +19,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import android.widget.Button;
@@ -221,7 +223,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         //OnClickListener for CopyClipboard Button
-        mCopyClipboard.setOnClickListener(new View.OnClickListener() {
+        mCopyClipboard.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
@@ -240,7 +242,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
-        mContainerLayout.setOnClickListener(new View.OnClickListener() {
+        mContainerLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideKeyboard(mToDoTextBodyEditText);
@@ -353,7 +355,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
 
 
-        mToDoSendFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mToDoSendFloatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mToDoTextBodyEditText.length() <= 0) {
@@ -375,7 +377,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mDateEditText = (EditText) view.findViewById(R.id.newTodoDateEditText);
         mTimeEditText = (EditText) view.findViewById(R.id.newTodoTimeEditText);
 
-        mDateEditText.setOnClickListener(new View.OnClickListener() {
+        mDateEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -404,7 +406,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
 
 
-        mTimeEditText.setOnClickListener(new View.OnClickListener() {
+        mTimeEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -491,8 +493,30 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        List<String> spinnerArr = new ArrayList<String>()
 
         // populate the spinnerlist
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
-        adapter.insert(" ",0);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList) {
+            //moves all labels to the center of the dropdown menu
+            //https://stackoverflow.com/questions/7511049/set-view-text-align-at-center-in-spinner-in-android
+            public View getView(int position, View convertView,ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(16);
+
+                return v;
+
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getDropDownView(position, convertView,parent);
+
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                return v;
+
+            }
+        };
+        adapter.insert("Select label",0);
         adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -536,7 +560,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         recurBtn = (Button) view.findViewById(R.id.recrBtn);
 
-        recurBtn.setOnClickListener(new View.OnClickListener() {
+        recurBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
