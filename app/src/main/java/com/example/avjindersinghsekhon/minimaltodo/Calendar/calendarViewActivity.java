@@ -35,17 +35,19 @@ public class calendarViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar_view);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
 
+        //Unit Test to check if Calendar view appears correctly and as expected. - Alex
+        //check for incoming intent data being sent in.
         Intent incoming = getIntent();
         boolean success = incoming.getBooleanExtra("success",false);
-
+        //set the success boolean value sent from intent as a local variable.
         test = success;
-
-        if (success && mCalendarView != null){
+        //if test value is true and calendar view has been initialized.
+        if (test && mCalendarView != null){
             text = String.format("Success");
         } else {
             text = String.format("Fail");
         }
-
+        //create a toast to display test result.
         Context context = getApplicationContext();
         int duration = LENGTH_LONG;
         if(toast != null) { toast.cancel(); }
