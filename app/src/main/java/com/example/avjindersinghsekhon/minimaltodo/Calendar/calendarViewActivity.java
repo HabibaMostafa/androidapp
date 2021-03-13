@@ -2,10 +2,16 @@ package com.example.avjindersinghsekhon.minimaltodo.Calendar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -26,32 +32,53 @@ public class calendarViewActivity extends AppCompatActivity {
 
     private static final String TAG = "calendarViewActivity";
     private CalendarView mCalendarView;
-    private Button btnReturn;
+    private Toolbar ctoolbar;
+    String theme;
 
     //when activity is called and created.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_view);
+        theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+
+        /*
+        * Mode switch depending on the user selection (day or night mode)
+        * */
+        if (theme.equals(MainFragment.DARKTHEME)) {
+            setTheme(R.style.CustomStyle_DarkTheme);
+            setContentView(R.layout.activity_calendar_view);
+        } else {
+            setTheme(R.style.CustomStyle_LightTheme);
+            setContentView(R.layout.activity_calendar_light_view);
+        }
+
+        /*
+        * create the back arrow and get the actionBar
+        * */
+        final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+
+        ctoolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(ctoolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        }
 
         //Button to return to main application page
-        btnReturn = (Button) findViewById(R.id.btnReturn);
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //old way to change back to main activity
-                //Intent intent = new Intent(calendarViewActivity.this, MainFragment.class);
-                //startActivity(intent);
+//        btnReturn = (Button) findViewById(R.id.btnReturn);
+//        btnReturn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //old way to change back to main activity
+//                //Intent intent = new Intent(calendarViewActivity.this, MainFragment.class);
+//                //startActivity(intent);
+//
+//                //new better way to change to main activity. finish() closes the opened activities
+//                //this way activities and not over filling the stack.
+//                finish();
+//            }
+//        });
 
-                //new better way to change to main activity. finish() closes the opened activities
-                //this way activities and not over filling the stack.
-                finish();
-            }
-        });
-
-
-        //listener in place for future implementation
-        //Calendar day listener
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -103,6 +130,27 @@ public class calendarViewActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    * Can be used to return to the home
+    * */
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        onBackPressed();
+//        return true;
+//    }
+
+    /*
+    * Navigating back to home
+    * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     CharSequence convertDate(int day, int month, int year) {
         CharSequence convertedDate = "";
@@ -121,8 +169,6 @@ public class calendarViewActivity extends AppCompatActivity {
         //format the string to display to the user
         CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, day, year);
         convertedDate = text;
-
-
         return convertedDate;
     }
 }

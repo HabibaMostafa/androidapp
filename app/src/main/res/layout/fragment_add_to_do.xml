@@ -130,20 +130,25 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
                                     android:text="Label: "
-                                    android:textSize="18sp" />
+                                    android:textSize="18sp"
+                                    android:textColor="#FFFFFF"/>
 
                                 <Spinner
                                     android:id="@+id/labelSpinner"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="282dp"
                                     android:layout_height="match_parent"
-                                    android:layout_gravity="bottom" />
+                                    android:layout_gravity="bottom"
+                                    android:drawableEnd="@android:drawable/arrow_down_float"
+                                    android:drawableRight="@android:drawable/arrow_down_float"
+                                    android:background="#4A4A4A"
+                                    android:spinnerMode="dropdown" />
 
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/toDoStatusSection"
-                                android:layout_width="match_parent"
+                                android:layout_width="339dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="36dp"
                                 android:layout_marginTop="30dp"
@@ -154,11 +159,11 @@
                                 <TextView
                                     android:id="@+id/toDoStatusTitle"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:paddingLeft="5dp"
                                     android:text="Status"
                                     android:textAppearance="@style/ToolbarTitleTextAppearanceDark"
-                                    android:textColor="@color/secondary_text" />
+                                    android:textColor="#FFFFFF" />
 
                                 <RadioGroup
                                     android:id="@+id/toDoStatusGroup"

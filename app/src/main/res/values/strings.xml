@@ -20,6 +20,7 @@
     <string name="night_mode_off_summary">Night mode is off</string>
     <string name="description">Description</string>
     <string name="user_label">Label</string>
+    <string name="spinner_title">Select label</string>
 
     <string-array name="snooze_options">
         <item>10 Minutes</item>
@@ -51,4 +52,5 @@
     <string name="occurrences">Occurrences</string>
     <string name="add_recurrence">Add Recurrences</string>
     <string name="select_day">Select Days</string>
+    <string name="calender_view">Calender View</string>
 </resources>
