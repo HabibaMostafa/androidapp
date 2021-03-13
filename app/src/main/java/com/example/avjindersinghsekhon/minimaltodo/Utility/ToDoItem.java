@@ -39,7 +39,7 @@ public class ToDoItem implements Serializable {
     private static final String TODOLABEL = "todolabel"; // unused now, just for testing
     private static final String TODOSTATUS = "todostatus";
     private static final String TODOLABELS = "todolabels";
-    private static final String TODODATECREATED = "dateassigned";
+    private static final String TODODATEASSIGNED = "dateassigned";
 
 
     // This constructor is called when the check mark is pressed for adding a new item
@@ -90,20 +90,16 @@ public class ToDoItem implements Serializable {
 
         // read the assigned date string from the JSON and convert it to Date
         String dateStr = "";
-        dateStr = jsonObject.getString(TODODATECREATED);
+        dateStr = jsonObject.getString(TODODATEASSIGNED);
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         if(dateStr != null) {
-
-            // Log.d("debugTheDate", dateStr);
             try {
                 this.dateAssigned = formatter.parse(dateStr);
             } catch (Exception e) {
                 Log.d("ToDoItem.java", e.toString());
             }
         } 
-        // else {
-        //     // dateAssigned = new Date();
-        // }
+
 
     }
 
@@ -139,8 +135,8 @@ public class ToDoItem implements Serializable {
         // }
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        jsonObject.put(TODODATECREATED, df.format(dateAssigned));
-        // jsonObject.put(TODODATECREATED, dateCreated.toString());
+        jsonObject.put(TODODATEASSIGNED, df.format(dateAssigned));
+
 
 
 
