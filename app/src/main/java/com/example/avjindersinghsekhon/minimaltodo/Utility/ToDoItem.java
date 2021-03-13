@@ -41,6 +41,8 @@ public class ToDoItem implements Serializable {
     private static final String TODOLABELS = "todolabels";
     private static final String TODODATECREATED = "dateassigned";
 
+
+    // This constructor is called when the check mark is pressed for adding a new item
     public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
@@ -51,6 +53,8 @@ public class ToDoItem implements Serializable {
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
         labelList = new ArrayList<String>();
+        dateAssigned = new Date();
+
         // dateCreated = null;
     }
 
@@ -84,24 +88,22 @@ public class ToDoItem implements Serializable {
 
         //
 
-        // debugging date creation
+        // read the assigned date string from the JSON and convert it to Date
         String dateStr = "";
         dateStr = jsonObject.getString(TODODATECREATED);
-        
-
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
         if(dateStr != null) {
 
-            Log.d("debugTheDate", dateStr);
+            // Log.d("debugTheDate", dateStr);
             try {
                 this.dateAssigned = formatter.parse(dateStr);
             } catch (Exception e) {
                 Log.d("ToDoItem.java", e.toString());
             }
-        } else {
-            dateAssigned = null;
-        }
+        } 
+        // else {
+        //     // dateAssigned = new Date();
+        // }
 
     }
 
@@ -131,10 +133,10 @@ public class ToDoItem implements Serializable {
 
 
         // add the dateCreated to the JSON which will be written
-        if(dateAssigned == null) {
-            Date date = new Date();
-            this.dateAssigned = date;
-        }
+        // if(dateAssigned == null) {
+        //     Date date = new Date();
+        //     this.dateAssigned = date;
+        // }
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         jsonObject.put(TODODATECREATED, df.format(dateAssigned));
@@ -236,13 +238,21 @@ public class ToDoItem implements Serializable {
     }
 
 
-
     public Date getAssignedDate() {
         return dateAssigned;
     }
 
     public void setAssignedDate(Date date) {
         this.dateAssigned = date;
+    }
+
+    // returns the date attribute as a string with the following format MM/dd/yyyy HH:mm:ss
+    public String assignedDateToString() {
+        String converted = "";
+
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        converted = df.format(this.dateAssigned);
+        return converted;
     }
 }
 
