@@ -57,6 +57,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 
 import java.text.SimpleDateFormat;
+// import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
+    private Date theAssignedDate;
     private int mUserColor;
     private boolean setDateButtonClickedOnce = false;
     private boolean setTimeButtonClickedOnce = false;
@@ -141,9 +143,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 //        check the radio
-
-
-
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
@@ -179,6 +178,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
         mUserChosenStatus = mUserToDoItem.getmToDoStatus();
+        theAssignedDate = mUserToDoItem.getAssignedDate();
+
+        // check if there already is a date set, if its NULL set it as the current date
+        // if(dateCreated != null) {
+        //     Date date = new Date();
+        //     this.dateCreated = date;
+        // }
 
 
         // refer to the existing ToDoItem and check the appropriate radio button:
@@ -572,6 +578,22 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
+
+        // // check if there already is a date set, if its NULL set it as the current date
+        // if(dateCreated != null) {
+        //     Date date = new Date();
+        //     this.dateCreated = date;
+        // }
+
+        // else {
+        //     Log.d("debugTheDate", "dateCreated is null!");
+        //     Date date = new Date();
+        //     Log.d("debugTheDate", "a date is " + date.toString());
+        //     // Log.d("debugTheDate", DateFormat.format(dateCreated));
+        // }
+
+
+        // get the current date and set dateCreated to the current date.
 
         return;
 
@@ -1020,5 +1042,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+    Date getCurrentDate() {
 
+        return null;
+    }
+
+    String dateToString(Date date) {
+        return "";
+    }
 }
