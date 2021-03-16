@@ -59,7 +59,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
-    private Button btngocalendar;
 
     private ArrayList<ToDoItem> mToDoItemsArrayList;
 
@@ -153,18 +152,6 @@ public class MainFragment extends AppDefaultFragment {
         //initialize layout features.
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
-        //Button used to send user to calendar view - Alex
-        btngocalendar = (Button) view.findViewById(R.id.btngocalendar);
-
-        //OnClickListener to attach send function to Calendar view button. - Alex
-        btngocalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),calendarViewActivity.class);
-                intent.putExtra("success",success);
-                startActivity(intent);
-            }
-        });
 
         mAddToDoItemFAB.setOnClickListener(new View.OnClickListener() {
 

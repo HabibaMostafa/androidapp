@@ -1,5 +1,5 @@
 package com.example.avjindersinghsekhon.minimaltodo.About;
-
+//Test comment
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -31,7 +31,7 @@ public class AboutActivity extends AppDefaultActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        // Get shared preferences
         theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.DARKTHEME)) {
             Log.d("OskarSchindler", "One");
