@@ -93,6 +93,7 @@ public class MainFragment extends AppDefaultFragment {
             "Get car washed",
             "Get my dry cleaning"
     };
+    public boolean success = true;
 
 
     @Override
@@ -567,16 +568,24 @@ public class MainFragment extends AppDefaultFragment {
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
+            //original
             if (item.hasReminder() && item.getToDoDate() != null) {
-                holder.mToDoTextview.setMaxLines(1);
+                holder.mToDoTextview.setMaxLines(2); // changed from 1
                 holder.mTimeTextView.setVisibility(View.VISIBLE);
 //                holder.mToDoTextview.setVisibility(View.GONE);
             } else {
                 holder.mTimeTextView.setVisibility(View.GONE);
-                holder.mToDoTextview.setMaxLines(2);
+                holder.mToDoTextview.setMaxLines(3); //changed from 2
             }
-            holder.mToDoTextview.setText(item.getToDoText());
+
+
+            // my code 
+            // holder.mToDoTextview.setMaxLines(2);
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+
+            // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
+
 //            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
 
 //            TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);

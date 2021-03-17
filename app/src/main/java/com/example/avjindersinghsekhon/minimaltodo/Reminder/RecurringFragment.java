@@ -36,6 +36,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class RecurringFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private Button doneRecurring;
+    private Button cancelBtn;
     private TextView recurringDays;
     private boolean[] selectDay;
     //date-picker
@@ -97,7 +98,32 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
             @Override
             public void onClick(View view) {
                 Intent in = new Intent(getActivity(), AddToDoActivity.class);
+                in.putExtra("Days", recurringDays.getText().toString());
                 startActivity(in);
+//                finish();
+            }
+        });
+
+        /*
+        * cancel button 
+        */
+        doneRecurring = (Button) view.findViewById(R.id.doneBtn);
+        doneRecurring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getActivity(), AddToDoActivity.class);
+                in.putExtra("Days", recurringDays.getText().toString());
+                startActivity(in);
+//                finish();
+            }
+        });
+
+        cancelBtn = (Button) view.findViewById(R.id.cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cancelIntent = new Intent(getActivity(), MainActivity.class);
+                startActivity(cancelIntent);
             }
         });
 
