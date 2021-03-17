@@ -24,6 +24,7 @@ import java.util.Collections;
 public class RecurringFragment extends Fragment {
 
     private Button doneRecurring;
+    private Button cancelBtn;
     private TextView recurringDays;
     private boolean[] selectDay;
     ArrayList<Integer> daysList = new ArrayList<>();
@@ -44,7 +45,32 @@ public class RecurringFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent in = new Intent(getActivity(), AddToDoActivity.class);
+                in.putExtra("Days", recurringDays.getText().toString());
                 startActivity(in);
+//                finish();
+            }
+        });
+
+        /*
+        * cancel button 
+        */
+        doneRecurring = (Button) view.findViewById(R.id.doneBtn);
+        doneRecurring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getActivity(), AddToDoActivity.class);
+                in.putExtra("Days", recurringDays.getText().toString());
+                startActivity(in);
+//                finish();
+            }
+        });
+
+        cancelBtn = (Button) view.findViewById(R.id.cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cancelIntent = new Intent(getActivity(), MainActivity.class);
+                startActivity(cancelIntent);
             }
         });
 
