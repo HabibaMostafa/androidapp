@@ -935,8 +935,22 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             return;
         }
 
-
+        // Get list of labels
         ArrayList<String> labels = todo.getLabelList();
+
+        // Add colour to labels to enhance categorization
+        ArrayList<String> colours = new ArrayList<>();
+
+        // Initialize colours to be used for labels
+        colours.add("#f58a38");
+        colours.add("#1590ed");
+        colours.add("#8f30bf");
+        colours.add("#199c40");
+        colours.add("#b02000");
+        colours.add("#38a4ba");
+
+        int colourIndex = 0;
+
         // labelButtonContainer
         final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
 
@@ -946,22 +960,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         // array list of labels assigned to the ToDoItem
         for(final String str: labels) {
             Button btn = new Button(context);
+            String chosenColour = colours.get(colourIndex);
+            btn.setBackgroundColor(Color.parseColor(chosenColour)); // From android.graphics.Color
             btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             btn.setText(str);
             btn.setTag(str + "_label_btn");
             container.addView(btn);
-
-
+            colourIndex++;
 
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    // remove the label from the toDo item
-
-                    todo.removeLabel(str);
-
-                    // delete this button
-                    container.removeView(v);
-                    
+                    todo.removeLabel(str); // remove the label from the toDo item
+                    container.removeView(v); // delete button
                 }
             });
         }
