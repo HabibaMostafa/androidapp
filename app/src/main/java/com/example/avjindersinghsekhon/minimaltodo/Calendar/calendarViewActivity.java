@@ -19,9 +19,12 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CalendarDate;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -98,22 +101,8 @@ public class calendarViewActivity extends AppCompatActivity {
                 context = getApplicationContext();
                 int duration = LENGTH_LONG;
 
-
-
-//                //Convert the numerical month to it's full name
-//                SimpleDateFormat parsedMonth = new SimpleDateFormat("MM");
-//                SimpleDateFormat rawMonth = new SimpleDateFormat("MMMM");
-//                String strMonth ="";
-//                try {
-//                    strMonth = rawMonth.format(parsedMonth.parse(Integer.toString(month+1)));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                //format the string to display to the user
-//                CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, dayOfMonth, year);
-
-                CharSequence convertedDate = convertDate(dayOfMonth, month, year);
+                //Creates the date text
+                CharSequence convertedDate = convertDateMatch(dayOfMonth, month, year);
                 Log.d(TAG, Integer.toString(month));
 
                 // cancel the previous toast if it exists
@@ -126,6 +115,10 @@ public class calendarViewActivity extends AppCompatActivity {
 
                 //displays the message at the bottom
                 toast.show();
+
+                //Set the selected date within calendar object
+                CalendarDate.setSelectedDate(convertedDate.toString());
+                CalendarDate.setDateChanged(true);
             }
         });
     }
@@ -160,7 +153,7 @@ public class calendarViewActivity extends AppCompatActivity {
         SimpleDateFormat rawMonth = new SimpleDateFormat("MMMM");
         String strMonth ="";
         try {
-            // plus one because month starts at 0 for january, but SimpleDateFormat uses "1" for Januarya
+            // plus one because month starts at 0 for january, but SimpleDateFormat uses "1" for January
             strMonth = rawMonth.format(parsedMonth.parse(Integer.toString(month+1)));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -168,6 +161,26 @@ public class calendarViewActivity extends AppCompatActivity {
 
         //format the string to display to the user
         CharSequence text = String.format("Date Selected: %s %d, %d", strMonth, day, year);
+        convertedDate = text;
+        return convertedDate;
+    }
+
+    CharSequence convertDateMatch(int day, int month, int year) {
+        CharSequence convertedDate = "";
+        String dateStr = String.format("%d-%d-%d", month+1,day,year);
+
+        //Convert the numerical month to it's full name
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            Log.d("calendarViewActivity", e.toString());
+        }
+
+        //format the string to display to the user
+        CharSequence text = String.format("%s", date);
         convertedDate = text;
         return convertedDate;
     }
