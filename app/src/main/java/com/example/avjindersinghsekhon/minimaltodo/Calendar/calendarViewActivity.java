@@ -35,6 +35,7 @@ public class calendarViewActivity extends AppCompatActivity {
 
     private static final String TAG = "calendarViewActivity";
     private CalendarView mCalendarView;
+    private Button mReset;
     private Toolbar ctoolbar;
     String theme;
 
@@ -82,6 +83,19 @@ public class calendarViewActivity extends AppCompatActivity {
 //            }
 //        });
 
+        //Alex - on click function for reset date button
+        mReset = (Button) findViewById(R.id.btnReset);
+        mReset.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //when clicked the date selected within Calendar Date object is set to no date so that
+                // main list view knows to display all events regardless of date.
+                CalendarDate.setSelectedDate("noData");
+                CalendarDate.setDateChanged(true);
+            }
+        });
+
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -118,7 +132,7 @@ public class calendarViewActivity extends AppCompatActivity {
 
                 //Set the selected date within calendar object
                 CalendarDate.setSelectedDate(convertedDate.toString());
-                CalendarDate.setDateChanged(true);
+                CalendarDate.setDateChanged(true); // true tells the main fragment if it needs to update list view
             }
         });
     }
