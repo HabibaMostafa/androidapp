@@ -39,7 +39,6 @@
         android:layout_marginTop="35dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-
         >
 
         <CalendarView
@@ -49,6 +48,13 @@
             android:dateTextAppearance="@style/CalenderStyle"
             android:weekDayTextAppearance="@style/cal_week_col"
             tools:visibility="visible" />
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset Date" />
 
 </LinearLayout>

@@ -26,4 +26,22 @@ public class calendarViewActivityTest extends TestCase {
         return;
     }
 
+    @Test
+    public void testConvertDateMatch() {
+
+        assertEquals( "Fri Jan 01 00:00:00 EST 2021", calenderView.convertDateMatch(1,0,2021));
+
+        assertEquals( "Wed Sep 23 00:00:00 EDT 1970", calenderView.convertDateMatch(23,8,1970));
+
+        assertEquals( "Wed Mar 08 00:00:00 EST 2000", calenderView.convertDateMatch(8,2,2000));
+
+        assertEquals( "Wed Jul 01 00:00:00 EDT 2015", calenderView.convertDateMatch(1,6,2015));
+
+        assertEquals( "Wed Mar 08 00:00:00 EST 2000", calenderView.convertDateMatch(8,2,2000));
+
+        assertEquals( "Tue Nov 04 00:00:00 EST 1997", calenderView.convertDateMatch(4,10,1997));
+
+        return;
+    }
+
 }
