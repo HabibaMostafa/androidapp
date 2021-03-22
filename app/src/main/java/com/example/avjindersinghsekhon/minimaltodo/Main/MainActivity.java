@@ -13,16 +13,31 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Calendar.calendarViewActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CalendarDate;
 
 public class MainActivity extends AppDefaultActivity {
+
+    private ActionBar actionBar;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
+
+            //if data is present in Calendar Date object, then display the selected date within main list view
+            if (CalendarDate.selectedDate.contains("noData")){
+                setActionBarText("Minimal");
+            } else {
+                String date = "temp";
+                if (CalendarDate.getSelectedDate().contains("00:00:00")){
+                    String remove = "00:00:00 EDT 2021";
+                    date = CalendarDate.getSelectedDate().substring(0, CalendarDate.getSelectedDate().length() - remove.length());
+                    setActionBarText("Minimal:  " + date);
+                }
+            }
         }
     }
 
@@ -82,6 +97,9 @@ public class MainActivity extends AppDefaultActivity {
         }
     }
 
+    public void setActionBarText(String text){
+        actionBar.setTitle(text);
+    }
 }
 
 
