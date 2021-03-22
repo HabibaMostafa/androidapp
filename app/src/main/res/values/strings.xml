@@ -37,7 +37,6 @@
     <string name="Recurtextview">TextView</string>
     <string name="Recurrence_Text">Custom Recurrence</string>
     <string name="hint" />
-    <string name="repeat_every">Repeat Every:</string>
     <string name="num">num</string>
     <string name="end">End</string>
     <string name="done">Done</string>
