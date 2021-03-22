@@ -93,6 +93,7 @@ public class MainFragment extends AppDefaultFragment {
             "Get car washed",
             "Get my dry cleaning"
     };
+    public boolean success = true;
 
 
     @Override
