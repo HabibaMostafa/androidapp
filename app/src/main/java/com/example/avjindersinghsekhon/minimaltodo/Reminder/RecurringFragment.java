@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
@@ -48,6 +50,16 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
     private static View theView;
     ArrayList<Integer> daysList = new ArrayList<>();
     String[] daysArray = {"Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday", "Saturday"};
+
+    //variables to add listeners to end on radio group
+    private RadioGroup endOn;
+    private RadioButton neverBtn;
+    private RadioButton onBtn;
+    private RadioButton afterBtn;
+    private EditText datePicker;
+    private EditText afterN;
+    private EditText timePicker;
+
 
 
     public RecurringFragment() {
@@ -89,6 +101,43 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
                     datePickerDialog.setThemeDark(true);
                 }
                 datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+
+            }
+        });
+
+        endOn = (RadioGroup) view.findViewById(R.id.repeatRadio);
+        neverBtn = (RadioButton) view.findViewById(R.id.rdoNever);
+        onBtn = (RadioButton) view.findViewById(R.id.rdoOn);
+        afterBtn = (RadioButton) view.findViewById(R.id.rdoAfter);
+        datePicker = (EditText) view.findViewById(R.id.endDateRecurrence);
+        afterN = (EditText) view.findViewById(R.id.editTextNumberSigned);
+        timePicker = (EditText) view.findViewById(R.id.editTextTime);
+
+        datePicker.setEnabled(false);
+        afterN.setEnabled(false);
+
+        endOn.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if(checkedId==R.id.rdoNever)
+                {
+                    datePicker.setEnabled(false);
+                    afterN.setEnabled(false);
+                }
+
+                if(checkedId==R.id.rdoOn)
+                {
+                    datePicker.setEnabled(true);
+                    afterN.setEnabled(false);
+                }
+
+                if (checkedId==R.id.rdoAfter)
+                {
+                    datePicker.setEnabled(false);
+                    afterN.setEnabled(true);
+                }
+
 
             }
         });
