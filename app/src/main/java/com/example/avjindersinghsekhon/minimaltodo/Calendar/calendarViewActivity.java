@@ -93,6 +93,7 @@ public class calendarViewActivity extends AppCompatActivity {
                 // main list view knows to display all events regardless of date.
                 CalendarDate.setSelectedDate("noData");
                 CalendarDate.setDateChanged(true);
+                finish();
             }
         });
 
@@ -133,6 +134,7 @@ public class calendarViewActivity extends AppCompatActivity {
                 //Set the selected date within calendar object
                 CalendarDate.setSelectedDate(convertedDate.toString());
                 CalendarDate.setDateChanged(true); // true tells the main fragment if it needs to update list view
+                finish();
             }
         });
     }
