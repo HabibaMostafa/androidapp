@@ -954,6 +954,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         // labelButtonContainer
         final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
 
+        container.removeAllViews();// need this or else if a button is selected twice it will be added twice
+
         // array list of labels assigned to the ToDoItem
         for(final String str: labels) {
             Button btn = new Button(context);
