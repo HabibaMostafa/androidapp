@@ -1,4 +1,4 @@
-<LinearLayout
+  <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -40,8 +40,8 @@
 
                     <EditText
                         android:id="@+id/userToDoEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_width="338dp"
+                        android:layout_height="63dp"
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="32dp"
                         android:gravity="start|bottom"
@@ -57,11 +57,6 @@
 
 
             </LinearLayout>
-
-
-
-
-
 
 
                 <ScrollView
@@ -135,20 +130,25 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
                                     android:text="Label: "
-                                    android:textSize="18sp" />
+                                    android:textSize="18sp"
+                                    android:textColor="#FFFFFF"/>
 
                                 <Spinner
                                     android:id="@+id/labelSpinner"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="282dp"
                                     android:layout_height="match_parent"
-                                    android:layout_gravity="bottom" />
+                                    android:layout_gravity="bottom"
+                                    android:drawableEnd="@android:drawable/arrow_down_float"
+                                    android:drawableRight="@android:drawable/arrow_down_float"
+                                    android:background="#4A4A4A"
+                                    android:spinnerMode="dropdown" />
 
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/toDoStatusSection"
-                                android:layout_width="match_parent"
+                                android:layout_width="339dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="36dp"
                                 android:layout_marginTop="30dp"
@@ -159,11 +159,11 @@
                                 <TextView
                                     android:id="@+id/toDoStatusTitle"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:paddingLeft="5dp"
                                     android:text="Status"
                                     android:textAppearance="@style/ToolbarTitleTextAppearanceDark"
-                                    android:textColor="@color/secondary_text" />
+                                    android:textColor="#FFFFFF" />
 
                                 <RadioGroup
                                     android:id="@+id/toDoStatusGroup"
@@ -224,7 +224,7 @@
                         <LinearLayout
                             android:id="@+id/todoReminderAndDateContainerLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="255dp"
                             android:layout_weight="1.5"
                             android:orientation="vertical">
 
@@ -347,29 +347,22 @@
                                     android:textColor="@color/secondary_text"
                                     android:textSize="14sp" />
 
-                                <android.support.v7.widget.SwitchCompat
-                                    android:id="@+id/switch_recurrent"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="20dp"
-                                    android:layout_marginBottom="50dp"
-                                    android:text="@string/recurring_event" />
-
-                                <Button
-                                    android:id="@+id/recrBtn"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginBottom="@dimen/mdtp_ampm_label_size"
-                                    android:background="@color/mdtp_button_color"
-                                    android:ellipsize="marquee"
-                                    android:padding="10sp"
-                                    android:text="@string/add_recurrence"
-                                    android:textColor="@color/primary_ligher"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
 
                             </LinearLayout>
+
+                            <Button
+                                android:id="@+id/recrBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginBottom="@dimen/mdtp_ampm_label_size"
+                                android:background="@color/mdtp_button_color"
+                                android:ellipsize="marquee"
+                                android:padding="10sp"
+                                android:text="@string/add_recurrence"
+                                android:textColor="@color/primary_ligher"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
 
 
                         </LinearLayout>

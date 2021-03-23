@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,11 +40,13 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CalendarDate;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
+import com.example.avjindersinghsekhon.minimaltodo.Calendar.calendarViewActivity;
 
 import org.json.JSONException;
 
@@ -49,6 +54,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ALARM_SERVICE;
@@ -59,8 +65,11 @@ public class MainFragment extends AppDefaultFragment {
     private FloatingActionButton mAddToDoItemFAB;
 
     private ArrayList<ToDoItem> mToDoItemsArrayList;
+    private ArrayList<ToDoItem> mStoredArrayList;
 
     private ArrayList<String> labelList;
+
+    private String selectedData = "Todays Date";
 
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
@@ -122,6 +131,7 @@ public class MainFragment extends AppDefaultFragment {
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
+        mStoredArrayList = getLocallyStoredData(storeRetrieveData);
         adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
         setAlarms();
 
@@ -146,6 +156,7 @@ public class MainFragment extends AppDefaultFragment {
 //        makeUpItems(mToDoItemsArrayList, testStrings.length);
 
 
+        //initialize layout features.
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
 
@@ -282,6 +293,7 @@ public class MainFragment extends AppDefaultFragment {
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
         ArrayList<ToDoItem> items = null;
+        ArrayList<ToDoItem> itemstoReturn = null;
 
         try {
             items = storeRetrieveData.loadFromFile();
@@ -290,11 +302,46 @@ public class MainFragment extends AppDefaultFragment {
             e.printStackTrace();
         }
 
-        if (items == null) {
-            items = new ArrayList<>();
-        }
-        return items;
+        
+        if (items != null){
+            if (CalendarDate.dateChanged){
+                itemstoReturn = new ArrayList<>();
 
+                for (ToDoItem item : items) {
+                    //if user selected to reset list to show all dates then add all to-do items to view.
+                    if (CalendarDate.getSelectedDate().contains("noData")){
+                        itemstoReturn.add(item);
+                    }
+                    else if (item.getToDoDate() != null) {
+
+                        //strip ending from selected date for search.
+                        String temp = "temp";
+                        if (CalendarDate.getSelectedDate().contains("00:00:00")){
+                            String remove = "00:00:00 EDT 2021";
+                            temp = CalendarDate.getSelectedDate().substring(0, CalendarDate.getSelectedDate().length() - remove.length());
+                        }
+
+                        //search to see if dates match
+                        String todoDate = item.getToDoDate().toString();
+                        if (todoDate.contains(temp)){
+                            itemstoReturn.add(item);
+                        }
+                    }
+                }
+
+                //reset date changed variable to false so that infinite loop does not occur.
+                CalendarDate.setDateChanged(false);
+
+            } else {
+                itemstoReturn = items;
+            }
+        }
+
+        if (itemstoReturn == null) {
+            itemstoReturn = new ArrayList<>();
+        }
+
+        return itemstoReturn;
     }
 
     @Override
@@ -328,12 +375,18 @@ public class MainFragment extends AppDefaultFragment {
         }
 
 
+        //Alex - if a date selection has happened, refresh activity so that changes my be applied.
+        if (CalendarDate.dateChanged){
+            getActivity().recreate();
+            //CalendarDate.setDateChanged(false);
+        }
     }
 
     @Override
     public void onStart() {
         app = (AnalyticsApplication) getActivity().getApplication();
         super.onStart();
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(CHANGE_OCCURED, false)) {
 
@@ -417,12 +470,14 @@ public class MainFragment extends AppDefaultFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_TODO_ITEM) {
             ToDoItem item = (ToDoItem) data.getSerializableExtra(TODOITEM);
             if (item.getToDoText().length() <= 0) {
                 return;
             }
             boolean existed = false;
+
 
             if (item.hasReminder() && item.getToDoDate() != null) {
                 Intent i = new Intent(getContext(), TodoNotificationService.class);
@@ -475,6 +530,7 @@ public class MainFragment extends AppDefaultFragment {
 
     private void addToDataStore(ToDoItem item) {
         mToDoItemsArrayList.add(item);
+        mStoredArrayList.add(item);
         adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
 
     }
@@ -564,16 +620,24 @@ public class MainFragment extends AppDefaultFragment {
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
+            //original
             if (item.hasReminder() && item.getToDoDate() != null) {
-                holder.mToDoTextview.setMaxLines(1);
+                holder.mToDoTextview.setMaxLines(2); // changed from 1
                 holder.mTimeTextView.setVisibility(View.VISIBLE);
 //                holder.mToDoTextview.setVisibility(View.GONE);
             } else {
                 holder.mTimeTextView.setVisibility(View.GONE);
-                holder.mToDoTextview.setMaxLines(2);
+                holder.mToDoTextview.setMaxLines(3); //changed from 2
             }
-            holder.mToDoTextview.setText(item.getToDoText());
+
+
+            // my code 
+            // holder.mToDoTextview.setMaxLines(2);
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+
+            // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
+
 //            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
 
 //            TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);
@@ -657,20 +721,19 @@ public class MainFragment extends AppDefaultFragment {
 //        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 //    }
 
-    private void saveDate() {
-        try {
-            storeRetrieveData.saveToFile(mToDoItemsArrayList);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private void saveDate() {
+//        try {
+//            storeRetrieveData.saveToFile(mToDoItemsArrayList);
+//        } catch (JSONException | IOException e) {
+//            e.printStackTrace();
+//        }
+//      }
 
     @Override
     public void onPause() {
         super.onPause();
         try {
-            storeRetrieveData.saveToFile(mToDoItemsArrayList);
+            storeRetrieveData.saveToFile(mStoredArrayList);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

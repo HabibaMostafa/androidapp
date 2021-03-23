@@ -19,10 +19,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import android.widget.Button;
@@ -55,6 +57,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 
 import java.text.SimpleDateFormat;
+// import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -112,6 +115,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
+    private Date theAssignedDate;
     private int mUserColor;
     private boolean setDateButtonClickedOnce = false;
     private boolean setTimeButtonClickedOnce = false;
@@ -139,9 +143,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 //        check the radio
-
-
-
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
@@ -177,6 +178,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
         mUserChosenStatus = mUserToDoItem.getmToDoStatus();
+        theAssignedDate = mUserToDoItem.getAssignedDate();
+
+        // check if there already is a date set, if its NULL set it as the current date
+        // if(dateCreated != null) {
+        //     Date date = new Date();
+        //     this.dateCreated = date;
+        // }
 
 
         // refer to the existing ToDoItem and check the appropriate radio button:
@@ -221,7 +229,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         //OnClickListener for CopyClipboard Button
-        mCopyClipboard.setOnClickListener(new View.OnClickListener() {
+        mCopyClipboard.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
@@ -240,7 +248,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
-        mContainerLayout.setOnClickListener(new View.OnClickListener() {
+        mContainerLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideKeyboard(mToDoTextBodyEditText);
@@ -353,7 +361,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
 
 
-        mToDoSendFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mToDoSendFloatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mToDoTextBodyEditText.length() <= 0) {
@@ -375,7 +383,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mDateEditText = (EditText) view.findViewById(R.id.newTodoDateEditText);
         mTimeEditText = (EditText) view.findViewById(R.id.newTodoTimeEditText);
 
-        mDateEditText.setOnClickListener(new View.OnClickListener() {
+        mDateEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -404,7 +412,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
 
 
-        mTimeEditText.setOnClickListener(new View.OnClickListener() {
+        mTimeEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -491,8 +499,30 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        List<String> spinnerArr = new ArrayList<String>()
 
         // populate the spinnerlist
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList);
-        adapter.insert(" ",0);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, labelList) {
+            //moves all labels to the center of the dropdown menu
+            //https://stackoverflow.com/questions/7511049/set-view-text-align-at-center-in-spinner-in-android
+            public View getView(int position, View convertView,ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(16);
+
+                return v;
+
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getDropDownView(position, convertView,parent);
+
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                return v;
+
+            }
+        };
+        adapter.insert("Select label",0);
         adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -536,7 +566,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         recurBtn = (Button) view.findViewById(R.id.recrBtn);
 
-        recurBtn.setOnClickListener(new View.OnClickListener() {
+        recurBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -548,6 +578,22 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
+
+        // // check if there already is a date set, if its NULL set it as the current date
+        // if(dateCreated != null) {
+        //     Date date = new Date();
+        //     this.dateCreated = date;
+        // }
+
+        // else {
+        //     Log.d("debugTheDate", "dateCreated is null!");
+        //     Date date = new Date();
+        //     Log.d("debugTheDate", "a date is " + date.toString());
+        //     // Log.d("debugTheDate", DateFormat.format(dateCreated));
+        // }
+
+
+        // get the current date and set dateCreated to the current date.
 
         return;
 
@@ -889,23 +935,39 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             return;
         }
 
-
+        // Get list of labels
         ArrayList<String> labels = todo.getLabelList();
+
+        // Add colour to labels to enhance categorization
+        ArrayList<String> colours = new ArrayList<>();
+
+        // Initialize colours to be used for labels
+        colours.add("#f58a38");
+        colours.add("#1590ed");
+        colours.add("#8f30bf");
+        colours.add("#199c40");
+        colours.add("#b02000");
+        colours.add("#38a4ba");
+
+        int colourIndex = 0;
+
         // labelButtonContainer
         final LinearLayout container = (LinearLayout) view.findViewById(R.id.labelButtonContainer);
 
-        container.removeAllViews();
+        container.removeAllViews();// need this or else if a button is selected twice it will be added twice
 
-        // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTEN); 
         // array list of labels assigned to the ToDoItem
         for(final String str: labels) {
             Button btn = new Button(context);
+            String chosenColour = colours.get(colourIndex);
+            btn.setBackgroundColor(Color.parseColor(chosenColour)); // From android.graphics.Color
             btn.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             btn.setText(str);
             btn.setTag(str + "_label_btn");
             container.addView(btn);
 
 
+            colourIndex++;
 
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -916,6 +978,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     // delete this button
                     container.removeView(v);
                     
+                    todo.removeLabel(str); // remove the label from the toDo item
+                    container.removeView(v); // delete button
                 }
             });
         }
@@ -996,5 +1060,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+    Date getCurrentDate() {
 
+        return null;
+    }
+
+    String dateToString(Date date) {
+        return "";
+    }
 }
