@@ -12,7 +12,6 @@
         android:label="@string/app_name"
         android:theme="@style/CustomStyle.DarkTheme">
         <activity android:name=".Calendar.calendarViewActivity"></activity>
-        <activity android:name=".Reminder.RecurringActivity" />
         <activity
             android:name=".Main.MainActivity"
             android:label="@string/app_name"

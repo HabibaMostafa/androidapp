@@ -1,64 +1,159 @@
 package com.example.avjindersinghsekhon.minimaltodo.AddToDo;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecurringFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RecurringFragment extends Fragment {
+import java.util.Calendar;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class RecurringFragment extends DialogFragment {
 
-    public RecurringFragment() {
-        // Required empty public constructor
-    }
+    private static final String TAG = "RecurringDialog" ;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecurringFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RecurringFragment newInstance(String param1, String param2) {
-        RecurringFragment fragment = new RecurringFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Button doneBtn;
+    private Button cancelBtn;
+    private RadioGroup radioButtonEnds;
+    private RadioButton radioButton;
 
+    private EditText mstartDate, mstartTime, moccurrences;
+    Spinner spinnerRepeat;
+
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_recurring, container, false);
+
+        doneBtn = (Button) view.findViewById(R.id.doneButton);
+        cancelBtn = (Button) view.findViewById(R.id.cancelButton);
+        mstartDate = (EditText) view.findViewById(R.id.startDate);
+        mstartTime = (EditText)view.findViewById(R.id.startTime);
+        spinnerRepeat = (Spinner)view.findViewById(R.id.spinnerFreq);
+        radioButtonEnds = (RadioGroup) view.findViewById(R.id.repeatRadio);
+
+        mstartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar startRecurDate = Calendar.getInstance();
+                int mYear = startRecurDate.get(Calendar.YEAR);
+                int mMonth = startRecurDate.get(Calendar.MONTH);
+                int mDay = startRecurDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker;
+                mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+
+                        selectedmonth = selectedmonth + 1;
+                        mstartDate.setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
+                    }
+                }, mYear, mMonth, mDay);
+                mDatePicker.setTitle("Select Date");
+                mDatePicker.show();
+            }
+        });
+
+//        radioButtonEnds.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+////                if(checkedId==R.id.rdoNever)
+////                {
+//////                    datePicker.setEnabled(false);
+//////                    afterN.setEnabled(false);
+////                }
+////
+////                if(checkedId==R.id.rdoOn)
+////                {
+//////                    datePicker.setEnabled(true);
+//////                    afterN.setEnabled(false);
+////                }
+////
+////                if (checkedId==R.id.rdoAfter)
+////                {
+//////                    datePicker.setEnabled(false);
+//////                    afterN.setEnabled(true);
+////                }
+//
+//                String valueRadioButton =  ((RadioButton) getView().findViewById(radioGroup.getCheckedRadioButtonId()))
+//                        .getText().toString();
+//
+//                if(valueRadioButton.equals("On")){
+//
+//                    // show the datepicker for end date
+//
+//
+//                }else if(valueRadioButton.equals("After")){
+//                    // show occurrences text box
+//                }
+//
+//
+//
+//            }
+//        });
+
+
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Passing data");
+
+                String spinnerText = spinnerRepeat.getSelectedItem().toString();
+                String startDate = mstartDate.getText().toString();
+
+//                int selectID = radioButtonEnds.getCheckedRadioButtonId();
+//                radioButton = (RadioButton) view.findViewById(selectID);
+
+                String valueRadioButton =
+                        ((RadioButton) getView().findViewById(radioButtonEnds.getCheckedRadioButtonId()))
+                                .getText().toString();
+
+
+                String input = " " + startDate +" " + spinnerText + " Ends " + valueRadioButton ;
+                if(!input.equals("")) {
+
+//                    AddToDoFragment frg = (AddToDoFragment) getActivity().getSupportFragmentManager()
+//                            .findFragmentByTag("AddToDoFragment");
+//                    frg.mReceiveRecurData.setText(input);
+                    AddToDoFragment.varDate = input;
+                    AddToDoFragment.setDataRecieve();
+
+                }
+
+
+                getDialog().dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: closing dialog");
+                getFragmentManager().popBackStack();
+                getDialog().dismiss();
+            }
+        });
+
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recurring, container, false);
-    }
+//    @Override
+//    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+//
+//    }
 }

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Reminder.RecurringActivity"
+    tools:context=".Reminder.RecurringOldActivity"
      >
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recurFragment"
-        android:name="com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringFragment"
+        android:name="com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringFragmentOld"
         tools:layout="@layout/fragment_recurring"/>
 
 

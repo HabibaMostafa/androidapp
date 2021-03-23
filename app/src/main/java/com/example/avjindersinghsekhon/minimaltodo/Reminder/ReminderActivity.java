@@ -3,9 +3,6 @@ package com.example.avjindersinghsekhon.minimaltodo.Reminder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.SwitchCompat;
-import android.view.View;
-import android.widget.Switch;
 
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity;
 import com.example.avjindersinghsekhon.minimaltodo.R;
@@ -25,10 +22,10 @@ public class ReminderActivity extends AppDefaultActivity {
 //        });
     }
 
-    public void recurActivity(){
-        Intent intent = new Intent(ReminderActivity.this, RecurringActivity.class);
-        startActivity(intent);
-    }
+//    public void recurActivity(){
+//        Intent intent = new Intent(ReminderActivity.this, RecurringOldActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     protected int contentViewLayoutRes() {

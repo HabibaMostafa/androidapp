@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="repeatOn" >
-        <item>Days</item>
-        <item>Weeks</item>
-        <item>Months</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
     </string-array>
 
 </resources>

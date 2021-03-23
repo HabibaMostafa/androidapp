@@ -21,7 +21,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.content.ClipboardManager;
 import android.widget.Toast;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -44,10 +42,8 @@ import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
-import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
-import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -131,11 +127,20 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private static ToDoItem theToDoItem;
     private static Context theContext;
 
+    static  public String varDate = "";
+    public static TextView mReceiveRecurData;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
+
+        /*
+        * used to receive recurrence data
+        * */
+        mReceiveRecurData = (TextView) view.findViewById(R.id.receiveRecurrences);
+
 //        setContentView(R.layout.new_to_do_layout);
         //Need references to these to change them during light/dark mode
         ImageButton reminderIconImageButton;
@@ -570,8 +575,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getActivity(), RecurringActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), RecurringOldActivity.class);
+//                startActivity(intent);
+
+                RecurringFragment recurringFragment  = new RecurringFragment();
+                recurringFragment.setTargetFragment(AddToDoFragment.this,1);
+                recurringFragment.show(getFragmentManager(),"RecurringDialog");
+
+//                RecurringDialog recurringDialog = new RecurringDialog();
+//                recurringDialog.setTargetFragment(AddToDoFragment.this,1);
+//                recurringDialog.show(getFragmentManager(),"RecurringDialog");
+
+
             }
         });
 
@@ -600,6 +615,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     }
 
+
+    public  static  void setDataRecieve(){
+        mReceiveRecurData.setText(" Recurrence Set :"+varDate);
+//        tvrepeat.setText("Repeats On : "+repeatOn);
+//        tvendson.setText("Ends On :"+endsDon);
+//        tvOccurence.setText("Occurnce :"+occurnce);
+
+    }
 
 
 
