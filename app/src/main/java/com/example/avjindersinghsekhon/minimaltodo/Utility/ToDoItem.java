@@ -140,14 +140,17 @@ public class ToDoItem implements Serializable {
         // read the assigned date string from the JSON and convert it to Date
         String dateStr = "";
         dateStr = jsonObject.getString(TODODATEASSIGNED);
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        if(dateStr != null) {
-            try {
-                this.dateAssigned = formatter.parse(dateStr);
-            } catch (Exception e) {
-                Log.d("ToDoItem.java", e.toString());
-            }
-        } 
+
+        this.dateAssigned= stringToDate(dateStr);
+
+        // SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        // if(dateStr != null) {
+        //     try {
+        //         this.dateAssigned = formatter.parse(dateStr);
+        //     } catch (Exception e) {
+        //         Log.d("ToDoItem.java", e.toString());
+        //     }
+        // } 
 
 
         // read the recurrence data
@@ -200,6 +203,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOLABELS, arr);
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
         jsonObject.put(TODODATEASSIGNED, df.format(dateAssigned));
 
         // add the recurrence information to the JSON file
