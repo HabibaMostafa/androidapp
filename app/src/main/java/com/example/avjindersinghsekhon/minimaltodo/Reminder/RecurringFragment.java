@@ -58,7 +58,7 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
     private RadioButton afterBtn;
     private EditText datePicker;
     private EditText afterN;
-    private EditText timePicker;
+    //private EditText timePicker;
 
 
 
@@ -111,7 +111,7 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
         afterBtn = (RadioButton) view.findViewById(R.id.rdoAfter);
         datePicker = (EditText) view.findViewById(R.id.endDateRecurrence);
         afterN = (EditText) view.findViewById(R.id.editTextNumberSigned);
-        timePicker = (EditText) view.findViewById(R.id.editTextTime);
+        //timePicker = (EditText) view.findViewById(R.id.editTextTime);
 
         datePicker.setEnabled(false);
         afterN.setEnabled(false);
