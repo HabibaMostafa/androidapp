@@ -724,6 +724,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         setDateEditText();
     }
 
+
     public void setTime(int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         if (mUserReminderDate != null) {
@@ -1268,6 +1269,85 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+//    checks what the existing end condition is set in the ToDo Item.
+    private void updateEndCondition(View v) {
+        RadioGroup rg = (RadioGroup) v.findViewById(R.id.recurring_end_group);
+        rg.clearCheck();
+        rg.check(R.id.recurrence_radio_endless);
+        ToDoItem item = mUserToDoItem;
+
+        boolean isEndless = item.getEndless();
+        boolean hasEndDate = item.getHasEndDate();
+        boolean hasLimit = item.getHasLimit();
+
+        // check if all are false
+        boolean allFalse = false;
+        if (isEndless==false && hasEndDate==false && hasLimit==false) {
+            allFalse = true;
+            Log.d("radio", "all false");
+        }
+
+        Log.d("radio", "checked if false");
+
+
+        // if all are endless, just set the default (Endless)
+        if(allFalse) {
+            item.setEndless(true);
+        }
+
+        //check off the selected radio button according to what is saved in the item
+        if(isEndless) {
+            rg.check(R.id.recurrence_radio_endless);
+        }
+
+        else if(hasEndDate) {
+            rg.check(R.id.recurrence_radio_end_date);
+        }
+
+        else if(hasLimit) {
+            rg.check(R.id.recurrence_radio_limit);
+        }
+
+        return;
+    }
+
+    public void setEndConditionListener(View v) {
+        final RadioGroup rg = (RadioGroup) v.findViewById(R.id.recurring_end_group);
+        int selected = rg.getCheckedRadioButtonId();
+        RadioButton sel = (RadioButton) v.findViewById(selected);
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
+                boolean isSelected = checkedRadioBtn.isChecked();
+                ToDoItem item = mUserToDoItem;
+//                Log.d("radio","picked " + Integer.toString(i));
+
+                int endlessId = R.id.recurrence_radio_endless;
+                int endDateID = R.id.recurrence_radio_end_date;
+                int LimitId = R.id.recurrence_radio_limit;
+
+                if(i == endlessId) {
+                    rg.check(endlessId);
+                    item.setEndless(true);
+                }
+
+                else if(i == endDateID) {
+                    rg.check(endDateID);
+                    item.setHasEndDate(true);
+                }
+
+                else if(i == LimitId) {
+                    rg.check(LimitId);
+                    item.setHasLimit(true);
+                }
+            }
+        });
+
+        return;
+    }
+
     private void updateRecurrenceUI(View v) {
         ToDoItem item = mUserToDoItem;
 
@@ -1286,6 +1366,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //populate the recurrence repeat interval spinner update and set listener
         setupIntervalSpinner(v);
+
+        //update the selected radio button
+        updateEndCondition(v);
+
+        //set the end condition radio listener
+        setEndConditionListener(v);
 
         return;
     }
