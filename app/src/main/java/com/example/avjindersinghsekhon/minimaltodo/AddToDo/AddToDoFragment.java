@@ -1409,6 +1409,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+    private void updateLimitValue(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText user_input = (EditText) v.findViewById(R.id.recurrence_limit);
+        int limit = item.getRecurrenceLimit();
+        String limitStr = Integer.toString(limit);
+
+        if(limit == 0) {
+            limitStr = "0";
+        }
+        user_input.setText(limitStr);
+
+        return;
+    }
     private void updateRecurrenceUI(View v) {
         ToDoItem item = mUserToDoItem;
 
@@ -1439,6 +1452,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //set the end date listener
         setEndDateListener(v);
+
+        // update the limit value
+        updateLimitValue(v);
+
+        //create on change listener.
+
 
         return;
     }

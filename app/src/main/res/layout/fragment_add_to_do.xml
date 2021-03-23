@@ -399,15 +399,15 @@
                                             android:textIsSelectable="false" />
 
                                         <EditText
-                                            android:id="@+id/recurring_limit"
+                                            android:id="@+id/recurrence_limit"
                                             android:layout_width="match_parent"
-                                            android:layout_height="11dp"
-                                            android:layout_weight="1"
-                                            android:editable="false"
-                                            android:focusable="false"
-                                            android:focusableInTouchMode="false"
-                                            android:gravity="center"
-                                            android:textIsSelectable="false" />
+                                            android:layout_height="wrap_content"
+                                            android:gravity="start|bottom"
+                                            android:inputType="number"
+                                            android:lines="1"
+                                            android:maxLines="1"
+                                            android:scrollbars="vertical"
+                                            android:textColor="@color/icons" />
 
                                     </LinearLayout>
 
