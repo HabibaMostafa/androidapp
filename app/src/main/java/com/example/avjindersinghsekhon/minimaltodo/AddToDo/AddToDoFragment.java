@@ -1422,6 +1422,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         return;
     }
+
+    private void setLimitOnChangeListener(View v) {
+
+        return;
+    }
     private void updateRecurrenceUI(View v) {
         ToDoItem item = mUserToDoItem;
 
@@ -1457,6 +1462,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         updateLimitValue(v);
 
         //create on change listener.
+        setLimitOnChangeListener(v);
 
 
         return;
