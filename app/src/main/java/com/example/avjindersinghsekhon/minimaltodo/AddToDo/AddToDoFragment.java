@@ -131,6 +131,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private static ToDoItem theToDoItem;
     private static Context theContext;
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -202,6 +203,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
+        //display the current recurrence settings for this Item
+        updateRecurrenceUI(view);
+
 
 
 
@@ -264,7 +268,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
         if (mUserReminderDate == null) {
             mToDoDateSwitch.setChecked(false);
-            mReminderTextView.setVisibility(View.INVISIBLE);
+            mReminderTextView.setVisibility(View.GONE);
         }
 
 //        TextInputLayout til = (TextInputLayout)findViewById(R.id.toDoCustomTextInput);
@@ -401,13 +405,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
                 if (theme.equals(MainFragment.DARKTHEME)) {
                     datePickerDialog.setThemeDark(true);
                 }
                 datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
-
             }
         });
 
@@ -1068,4 +1070,164 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     String dateToString(Date date) {
         return "";
     }
+
+    private void setupIntervalSpinner(View the_view) {
+
+        ArrayList<String> intervals = new ArrayList<String>();
+        intervals.add("Day");
+        intervals.add("Week");
+        intervals.add("Two Weeks");
+        intervals.add("Month");
+        intervals.add("Year");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, intervals) {
+            //moves all labels to the center of the dropdown menu
+            //https://stackoverflow.com/questions/7511049/set-view-text-align-at-center-in-spinner-in-android
+            public View getView(int position, View convertView,ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                ((TextView) v).setTextSize(16);
+                return v;
+
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getDropDownView(position, convertView,parent);
+                ((TextView) v).setGravity(Gravity.CENTER);
+                return v;
+
+            }
+        };
+
+
+        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
+        final Spinner spinner = (Spinner)the_view.findViewById(R.id.repeat_spinner);
+        spinner.setAdapter(adapter);
+
+        ToDoItem item = mUserToDoItem;
+        theContext = getContext();
+        int selectedIndex = 0;
+
+        //check the ToDoItem and selected the saved interval (if there is one, else set default to day)
+        String interval = item.getInterval();
+        if(interval == null) {
+            item.setInterval("Day");
+        }
+        else {
+            if (interval.equals("Day")) {
+                selectedIndex = 0;
+            } else if (interval.equals("Week")) {
+                selectedIndex = 1;
+            } else if (interval.equals("Two Weeks")) {
+                selectedIndex = 2;
+            } else if (interval.equals("Month")) {
+                selectedIndex = 3;
+            } else if (interval.equals("Year")) {
+                selectedIndex = 4;
+            }
+        }
+
+        spinner.setSelection(selectedIndex, true);
+        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                switch(i) {
+                    case 0:
+                        mUserToDoItem.setInterval("Day");
+                        break;
+
+                    case 1:
+                        mUserToDoItem.setInterval("Week");
+                        break;
+
+                    case 2:
+                        mUserToDoItem.setInterval("Two Weeks");
+                        break;
+
+                    case 3:
+                        mUserToDoItem.setInterval("Month");
+                        break;
+
+                    case 4:
+                        mUserToDoItem.setInterval("Year");
+
+                        break;
+
+                    default:
+                        break;
+                }
+
+                spinner.setSelection(i, true);
+                return;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+        return;
+    }
+
+    //listens if the recurrence button is on or off and updates the item state
+    private void setRecurringOnListener(View v) {
+        SwitchCompat recurringSwitch = (SwitchCompat) v.findViewById(R.id.recurring_switch);
+        recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mUserToDoItem.setRecurring(true);
+                    // show the area
+
+                } else {
+                    mUserToDoItem.setRecurring(false);
+                    // maybe hide the area?
+                }
+            }
+        });
+        return;
+    }
+
+    private void updateStartDate(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText recurrenceStart = (EditText) v.findViewById(R.id.recurring_start_date);
+        Date savedDate = item.getStartDate();
+
+        //If no date was saved, set the date as today
+        if(savedDate == null) {
+            Date newDate = new Date();
+            item.setStartDate(newDate);
+        }
+
+        //update the UI to show the date
+        String dateToString = item.dateToString(item.getStartDate());
+        recurrenceStart.setText(dateToString);
+
+        return;
+    }
+
+    private void updateRecurrenceUI(View v) {
+        ToDoItem item = mUserToDoItem;
+
+        //update the recurrence on switch.
+        SwitchCompat recurringSwitch = (SwitchCompat) v.findViewById(R.id.recurring_switch);
+        recurringSwitch.setChecked(item.getRecurring());
+
+        //update the start date
+        updateStartDate(v);
+        //set a listener for the start date
+
+        //set a listener for the switch
+        setRecurringOnListener(v);
+
+        //populate the recurrence repeat interval spinner update and set listener
+        setupIntervalSpinner(v);
+
+        return;
+    }
+
+
+
+
 }

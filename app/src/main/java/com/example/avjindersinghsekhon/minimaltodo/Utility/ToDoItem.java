@@ -13,7 +13,8 @@ import java.util.UUID;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
+
 
 public class ToDoItem implements Serializable {
     private String mToDoText;
@@ -28,6 +29,30 @@ public class ToDoItem implements Serializable {
     private Date mToDoDate;
     private Date dateAssigned;
     private UUID mTodoIdentifier;
+    private String TAG = "ToDoItem";
+
+    //used by the recurring function
+    private Date startDate;
+    private Date endDate;
+    private String interval;
+    private Boolean isRecurring;
+    private Boolean isEndless;
+    private Boolean hasStartDate;
+    private Boolean hasLimit;
+    private int timesRecurred;
+    private int recurrenceLimit;
+
+    private static final String RECURRENCE_START = "recurrence_start";
+    private static final String RECURRENCE_END = "recurrence_end";
+    private static final String RECURRENCE_INTERVAL = "recurrence_interval";
+    private static final String RECURRENCE_ON = "recurrence_on";
+    private static final String RECURRENCE_ENDLESS = "recurrence_endless";
+    private static final String RECURRENCE_HAS_START = "recurrence_has_start";
+    private static final String RECURRENCE_HAS_LIMIT = "recurrence_has_limit";
+    private static final String RECURRENCE_AMT = "recurrence_amount";
+    private static final String RECURRENCE_LIMIT = "recurrence_limit";
+
+
     //add description
     private static final String TODODESCRIPTION = "tododescription";
     private static final String TODOTEXT = "todotext";
@@ -55,11 +80,21 @@ public class ToDoItem implements Serializable {
         labelList = new ArrayList<String>();
         dateAssigned = new Date();
 
-        // dateCreated = null;
+        //init the recurrence related variables
+        dateAssigned = new Date();
+        startDate = new Date();
+        endDate = new Date();
+        interval = "";
+        isRecurring = true;
+        isEndless = false;
+        hasStartDate = false;
+        hasLimit = false;
+        timesRecurred = 0;
+        recurrenceLimit = 0;
     }
 
 
-    // this constructor is used
+    // this constructor reads the information in the JSON object and updates the ToDoItem object
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
         mToDoLabel = jsonObject.getString(TODOLABEL);
@@ -86,8 +121,6 @@ public class ToDoItem implements Serializable {
 
 
 
-        //
-
         // read the assigned date string from the JSON and convert it to Date
         String dateStr = "";
         dateStr = jsonObject.getString(TODODATEASSIGNED);
@@ -101,6 +134,38 @@ public class ToDoItem implements Serializable {
         } 
 
 
+        // read the recurrence data
+
+
+        try {
+            this.isRecurring = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_ON));
+        } catch (Exception e){
+            this.isRecurring = false;
+        }
+
+        if(this.isRecurring) {
+            this.startDate = stringToDate(jsonObject.getString(RECURRENCE_START));
+            this.endDate = stringToDate(jsonObject.getString(RECURRENCE_END));
+            this.interval = jsonObject.getString(RECURRENCE_INTERVAL);
+            this.isEndless = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_ENDLESS));
+            this.hasStartDate = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_START));
+            this.hasLimit = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_LIMIT));
+            this.timesRecurred = Integer.parseInt(jsonObject.getString(RECURRENCE_AMT));
+            this.recurrenceLimit = Integer.parseInt(jsonObject.getString(RECURRENCE_LIMIT));
+
+            Log.d(TAG, "start date: " + dateToString(startDate));
+            Log.d(TAG, "end date: " + dateToString(endDate));
+            Log.d(TAG, "interval: " + (interval));
+            Log.d(TAG, "is recurring: " + String.valueOf(isRecurring));
+            Log.d(TAG, "is endless: " + String.valueOf(isEndless));
+            Log.d(TAG, "has a start date: " +  String.valueOf(hasStartDate));
+            Log.d(TAG, "has a limit: " + String.valueOf(hasLimit));
+            Log.d(TAG, "number recurred: " + Integer.toString(timesRecurred));
+            Log.d(TAG, "recurrence limit: "+ Integer.toString(recurrenceLimit));
+        }
+
+
+        return;
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -110,7 +175,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOLABEL, mToDoLabel);
         jsonObject.put(TODOSTATUS, mToDoStatus);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
-//        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
+        // jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
         }
@@ -127,17 +192,19 @@ public class ToDoItem implements Serializable {
 
         jsonObject.put(TODOLABELS, arr);
 
-
-        // add the dateCreated to the JSON which will be written
-        // if(dateAssigned == null) {
-        //     Date date = new Date();
-        //     this.dateAssigned = date;
-        // }
-
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         jsonObject.put(TODODATEASSIGNED, df.format(dateAssigned));
 
-
+        // add the recurrence information to the JSON file
+        jsonObject.put(RECURRENCE_START, dateToString(startDate));
+        jsonObject.put(RECURRENCE_END, dateToString(endDate));
+        jsonObject.put(RECURRENCE_INTERVAL, interval);
+        jsonObject.put(RECURRENCE_ON, String.valueOf(isRecurring));
+        jsonObject.put(RECURRENCE_ENDLESS, String.valueOf(isEndless));
+        jsonObject.put(RECURRENCE_HAS_START, String.valueOf(hasStartDate));
+        jsonObject.put(RECURRENCE_HAS_LIMIT, String.valueOf(hasLimit));
+        jsonObject.put(RECURRENCE_AMT, Integer.toString(timesRecurred));
+        jsonObject.put(RECURRENCE_LIMIT, Integer.toString(recurrenceLimit));
 
 
 
@@ -168,6 +235,10 @@ public class ToDoItem implements Serializable {
     public void setmToDoDescription(String mToDoDescription){this.mToDoDescription = mToDoDescription;}
 
     public String getToDoText() {
+        if(mToDoText == null) {
+            return "null";
+        }
+
         return mToDoText;
     }
 
@@ -249,6 +320,105 @@ public class ToDoItem implements Serializable {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         converted = df.format(this.dateAssigned);
         return converted;
+    }
+
+    public String dateToString(Date theDate) {
+        String converted = "";
+
+        if(theDate == null) {
+            return "null";
+        }
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        converted = df.format(theDate);
+        return converted;
+    }
+
+    
+    public Date stringToDate(String dateStr) {
+        Date toConvert = new Date();
+        toConvert = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        if(dateStr != null) {
+            try {
+                toConvert = formatter.parse(dateStr);
+            } catch (Exception e) {
+                Log.d("ToDoItem.java", e.toString());
+            }
+        } 
+
+        return toConvert;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getInterval() {
+        return interval;
+    }
+
+    public void setInterval(String interval) {
+        this.interval = interval;
+    }
+
+    public Boolean getRecurring() {
+        return isRecurring;
+    }
+
+    public void setRecurring(Boolean recurring) {
+        isRecurring = recurring;
+    }
+
+    public Boolean getEndless() {
+        return isEndless;
+    }
+
+    public void setEndless(Boolean endless) {
+        isEndless = endless;
+    }
+
+    public Boolean getHasStartDate() {
+        return hasStartDate;
+    }
+
+    public void setHasStartDate(Boolean hasStartDate) {
+        this.hasStartDate = hasStartDate;
+    }
+
+    public Boolean getHasLimit() {
+        return hasLimit;
+    }
+
+    public void setHasLimit(Boolean hasLimit) {
+        this.hasLimit = hasLimit;
+    }
+
+    public int getTimesRecurred() {
+        return timesRecurred;
+    }
+
+    public void setTimesRecurred(int timesRecurred) {
+        this.timesRecurred = timesRecurred;
+    }
+
+    public int getRecurrenceLimit() {
+        return recurrenceLimit;
+    }
+
+    public void setRecurrenceLimit(int recurrenceLimit) {
+        this.recurrenceLimit = recurrenceLimit;
     }
 }
 
