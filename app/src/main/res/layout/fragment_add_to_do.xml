@@ -69,7 +69,6 @@
                         android:orientation="vertical">
 
 
-
                         <com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout
                             android:id="@+id/toDoCustomTextInput01"
                             android:layout_width="match_parent"
@@ -120,8 +119,8 @@
                                 android:id="@+id/labelSelection"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="20dp"
                                 android:layout_marginLeft="2dp"
+                                android:layout_marginTop="20dp"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -130,17 +129,17 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
                                     android:text="Label: "
-                                    android:textSize="18sp"
-                                    android:textColor="#FFFFFF"/>
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp" />
 
                                 <Spinner
                                     android:id="@+id/labelSpinner"
                                     android:layout_width="282dp"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="bottom"
+                                    android:background="#4A4A4A"
                                     android:drawableEnd="@android:drawable/arrow_down_float"
                                     android:drawableRight="@android:drawable/arrow_down_float"
-                                    android:background="#4A4A4A"
                                     android:spinnerMode="dropdown" />
 
 
@@ -226,7 +225,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -239,7 +239,7 @@
                                 android:orientation="horizontal">
 
                                 <ImageButton
-                                    android:id="@+id/reccuring_image_btn"
+                                    android:id="@+id/recurring_image_btn"
                                     android:layout_width="4dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight=".4"
@@ -250,7 +250,7 @@
                                     android:tint="#B1B1B1" />
 
                                 <TextView
-                                    android:id="@+id/reccuring_header_string"
+                                    android:id="@+id/recurring_header_string"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2"
@@ -259,8 +259,8 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="8dp"
                                     android:paddingBottom="8dp"
-                                    android:text="@string/recurring_item"
-                                    android:textColor="@color/secondary_text"
+                                    android:text="Recurring Item"
+                                    android:textColor="@color/grey300"
                                     android:textSize="16sp" />
 
 
@@ -296,7 +296,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:padding="10sp"
-                                        android:text="@string/recurring_start_header"
+                                        android:text="Start Date:"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBaseline_toBaselineOf="@+id/editTextNumberDecimal"
@@ -326,10 +326,10 @@
                                     <TextView
                                         android:id="@+id/repeat_header"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1"
                                         android:padding="10sp"
-                                        android:text="@string/repeat_every"
+                                        android:text="Repeat Every:"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBaseline_toBaselineOf="@+id/editTextNumberDecimal"
@@ -340,7 +340,7 @@
                                     <Spinner
                                         android:id="@+id/repeat_spinner"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:layout_gravity="bottom"
                                         android:layout_weight="1"
                                         android:background="#4A4A4A"
@@ -348,6 +348,68 @@
                                         android:drawableRight="@android:drawable/arrow_down_float"
                                         android:spinnerMode="dropdown" />
 
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/recurring_end_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RadioGroup
+                                        android:id="@+id/recurring_end_group"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:paddingLeft="15dp">
+
+                                        <RadioButton
+                                            android:id="@+id/recurrence_radio_endless"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Never Ends" />
+
+                                        <RadioButton
+                                            android:id="@+id/recurrence_radio_end_date"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Ends On:" />
+
+                                        <RadioButton
+                                            android:id="@+id/recurrence_radio_limit"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Maximum Recurrences:  " />
+                                    </RadioGroup>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                        <EditText
+                                            android:id="@+id/recurring_end_date"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:layout_weight="1"
+                                            android:editable="false"
+                                            android:focusable="false"
+                                            android:focusableInTouchMode="false"
+                                            android:gravity="center"
+                                            android:textIsSelectable="false" />
+
+                                        <EditText
+                                            android:id="@+id/recurrence_limit"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="start|bottom"
+                                            android:inputType="number"
+                                            android:lines="1"
+                                            android:maxLines="1"
+                                            android:scrollbars="vertical"
+                                            android:textColor="@color/icons" />
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
@@ -401,7 +463,7 @@
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/toDoHasDateSwitchCompat"
                                     android:layout_width="0dp"
-                                    android:layout_height="22dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:gravity="center"
@@ -423,7 +485,7 @@
                             <LinearLayout
                                 android:id="@+id/toDoEnterDateLinearLayout"
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="36dp"
                                 android:layout_marginRight="36dp"
                                 android:layout_weight="1"
@@ -434,7 +496,7 @@
                                 <LinearLayout
 
                                     android:layout_width="match_parent"
-                                    android:layout_height="0dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="top">
 
@@ -476,7 +538,7 @@
                                 <TextView
                                     android:id="@+id/newToDoDateTimeReminderTextView"
                                     android:layout_width="match_parent"
-                                    android:layout_height="0dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_weight="2"
                                     android:gravity="start"
                                     android:text="@string/remind_date_and_time"
@@ -499,7 +561,7 @@
                                 android:textColor="@color/primary_ligher"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
 
                         </LinearLayout>
