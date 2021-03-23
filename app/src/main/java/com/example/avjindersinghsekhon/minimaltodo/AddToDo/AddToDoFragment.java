@@ -102,6 +102,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     //this is for add recurrance
     private Button recurBtn;
     private boolean updateRecurringCalandar;
+    private boolean updateRecurringCalandarEnd;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -139,6 +140,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         updateRecurringCalandar = false;
+        updateRecurringCalandarEnd = false;
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -869,6 +871,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             setStartDate(year, month, day);
             updateRecurringCalandar = false;
         }
+
+        if(updateRecurringCalandarEnd) {
+            setEndDate(year, month, day);
+            updateRecurringCalandarEnd = false;
+        }
         else {
             setDate(year, month, day);
         }
@@ -1230,6 +1237,16 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+    public void setEndDate(int year, int month, int day) {
+
+        Calendar cal = new GregorianCalendar(year,month,day,00,00,00);
+        ToDoItem item = mUserToDoItem;
+        Date changedDate = cal.getTime();
+        item.setEndDate(changedDate);
+        updateEndDate(theView);
+        return;
+    }
+
     // setup the date picker functionality
     private void setStartDateListener(View v) {
 
@@ -1258,13 +1275,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 }
                 datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
                 updateRecurringCalandar = true;
-
             }
-
-
         });
-
-
 
         return;
     }
@@ -1348,6 +1360,55 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         return;
     }
 
+    //update the start date
+    private void updateEndDate(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText recurrenceEnd = (EditText) v.findViewById(R.id.recurring_end_date);
+        Date savedDate = item.getEndDate();
+
+        //If no date was saved, set the date as today
+        if(savedDate == null) {
+            Date newDate = new Date();
+            item.setEndDate(newDate);
+        }
+        //update the UI to show the date
+        String dateToString = item.dateToStringNoTime(item.getEndDate());
+        recurrenceEnd.setText(dateToString);
+
+        return;
+    }
+
+    private void setEndDateListener(View v) {
+        EditText recurrenceEnd = (EditText) v.findViewById(R.id.recurring_end_date);
+        recurrenceEnd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToDoItem item = mUserToDoItem;
+                Date savedDate = item.getEndDate();
+
+                //If no date was saved, set the date as today
+                if(savedDate == null) {
+                    Date newDate = new Date();
+                    item.setStartDate(newDate);
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(savedDate);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
+                if (theme.equals(MainFragment.DARKTHEME)) {
+                    datePickerDialog.setThemeDark(true);
+                }
+                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+                updateRecurringCalandarEnd = true;
+            }
+        });
+
+        return;
+    }
+
     private void updateRecurrenceUI(View v) {
         ToDoItem item = mUserToDoItem;
 
@@ -1372,6 +1433,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //set the end condition radio listener
         setEndConditionListener(v);
+
+        //update the end date
+        updateEndDate(v);
+
+        //set the end date listener
+        setEndDateListener(v);
 
         return;
     }
