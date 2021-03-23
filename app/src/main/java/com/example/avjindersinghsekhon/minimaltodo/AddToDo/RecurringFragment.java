@@ -124,6 +124,7 @@ public class RecurringFragment extends DialogFragment {
 
 
                 String input = " " + startDate +" " + spinnerText + " Ends " + valueRadioButton ;
+
                 if(!input.equals("")) {
 
 //                    AddToDoFragment frg = (AddToDoFragment) getActivity().getSupportFragmentManager()
