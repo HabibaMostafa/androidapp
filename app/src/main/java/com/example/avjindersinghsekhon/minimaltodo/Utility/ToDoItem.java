@@ -420,5 +420,16 @@ public class ToDoItem implements Serializable {
     public void setRecurrenceLimit(int recurrenceLimit) {
         this.recurrenceLimit = recurrenceLimit;
     }
+
+    public String dateToStringNoTime(Date date) {
+        String converted = "";
+
+        if(date == null) {
+            return "null";
+        }
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        converted = df.format(date);
+        return converted;
+    }
 }
 

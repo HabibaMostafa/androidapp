@@ -48,6 +48,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -61,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -99,6 +101,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     //this is for add recurrance
     private Button recurBtn;
+    private boolean updateRecurringCalandar;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -135,6 +138,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        updateRecurringCalandar = false;
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -399,6 +403,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 } else {
                     date = new Date();
                 }
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
                 int year = calendar.get(Calendar.YEAR);
@@ -859,7 +864,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        setDate(year, month, day);
+        if(updateRecurringCalandar) {
+            setStartDate(year, month, day);
+            updateRecurringCalandar = false;
+        }
+        else {
+            setDate(year, month, day);
+        }
     }
 
     public void setEnterDateLayoutVisible(boolean checked) {
@@ -1201,8 +1212,58 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
 
         //update the UI to show the date
-        String dateToString = item.dateToString(item.getStartDate());
+        String dateToString = item.dateToStringNoTime(item.getStartDate());
         recurrenceStart.setText(dateToString);
+
+        return;
+    }
+
+    // called when the start date calendar is modified.
+    public void setStartDate(int year, int month, int day) {
+
+        Calendar cal = new GregorianCalendar(year,month,day,00,00,00);
+        ToDoItem item = mUserToDoItem;
+        Date changedDate = cal.getTime();
+        item.setStartDate(changedDate);
+        updateStartDate(theView);
+        return;
+    }
+
+    // setup the date picker functionality
+    private void setStartDateListener(View v) {
+
+        EditText recurrenceStart = (EditText) v.findViewById(R.id.recurring_start_date);
+
+        recurrenceStart.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToDoItem item = mUserToDoItem;
+                Date savedDate = item.getStartDate();
+
+                //If no date was saved, set the date as today
+                if(savedDate == null) {
+                    Date newDate = new Date();
+                    item.setStartDate(newDate);
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(savedDate);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
+                if (theme.equals(MainFragment.DARKTHEME)) {
+                    datePickerDialog.setThemeDark(true);
+                }
+                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+                updateRecurringCalandar = true;
+
+            }
+
+
+        });
+
+
 
         return;
     }
@@ -1216,7 +1277,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //update the start date
         updateStartDate(v);
+
         //set a listener for the start date
+        setStartDateListener(v);
 
         //set a listener for the switch
         setRecurringOnListener(v);
