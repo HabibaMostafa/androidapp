@@ -83,14 +83,27 @@ public class ToDoItem implements Serializable {
         dateAssigned = new Date();
 
         //init the recurrence related variables
+//        constructor calls this
+//        if(dateAssigned == null) {
         dateAssigned = new Date();
+//        }
+//        if(startDate == null) {
         startDate = new Date();
+//        }
+//        if(endDate == null) {
         endDate = new Date();
+//        }
+//        if(interval == null) {
         interval = "";
+//        }
         isRecurring = true;
         isEndless = false;
         hasStartDate = false;
+
+//        if(hasLimit == null) {
         hasLimit = false;
+//        }
+
         hasEndDate = false;
         timesRecurred = 0;
         recurrenceLimit = 0;
@@ -146,7 +159,7 @@ public class ToDoItem implements Serializable {
             this.isRecurring = false;
         }
 
-        if(this.isRecurring) {
+//        if(this.isRecurring) {
             this.startDate = stringToDate(jsonObject.getString(RECURRENCE_START));
             this.endDate = stringToDate(jsonObject.getString(RECURRENCE_END));
             this.interval = jsonObject.getString(RECURRENCE_INTERVAL);
@@ -156,7 +169,7 @@ public class ToDoItem implements Serializable {
             this.hasLimit = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_LIMIT));
             this.timesRecurred = Integer.parseInt(jsonObject.getString(RECURRENCE_AMT));
             this.recurrenceLimit = Integer.parseInt(jsonObject.getString(RECURRENCE_LIMIT));
-        }
+//        }
 
 
         return;
@@ -458,8 +471,8 @@ public class ToDoItem implements Serializable {
         return recurrenceLimit;
     }
 
-    public void setRecurrenceLimit(int recurrenceLimit) {
-        this.recurrenceLimit = recurrenceLimit;
+    public void setRecurrenceLimit(int newlimit) {
+        this.recurrenceLimit = newlimit;
     }
 
     public String dateToStringNoTime(Date date) {

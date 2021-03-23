@@ -374,6 +374,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoSendFloatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                update the limit.
+                ToDoItem item = mUserToDoItem;
+                Log.d("addtodo","has a limit?" + String.valueOf(item.getHasLimit()) );
+                if(item.getHasLimit()) {
+                    EditText user_input = (EditText) theView.findViewById(R.id.recurrence_limit);
+                    String inputted = user_input.getText().toString();
+                    Log.d("addtodo", "limit " + inputted);
+                    item.setRecurrenceLimit(Integer.parseInt(inputted));
+                }
+
                 if (mToDoTextBodyEditText.length() <= 0) {
                     mToDoTextBodyEditText.setError(getString(R.string.todo_error));
                 } else if (mUserReminderDate != null && mUserReminderDate.before(new Date())) {
@@ -1301,6 +1312,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         Log.d("radio", "checked if false");
 
+        EditText limitInput = (EditText) v.findViewById(R.id.recurrence_limit);
+        EditText endDateInput = (EditText) v.findViewById(R.id.recurring_end_date);
+        limitInput.setVisibility(View.INVISIBLE);
+        endDateInput.setVisibility(View.INVISIBLE);
 
         // if all are endless, just set the default (Endless)
         if(allFalse) {
@@ -1310,14 +1325,20 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         //check off the selected radio button according to what is saved in the item
         if(isEndless) {
             rg.check(R.id.recurrence_radio_endless);
+            limitInput.setVisibility(View.INVISIBLE);
+            endDateInput.setVisibility(View.INVISIBLE);
         }
 
         else if(hasEndDate) {
             rg.check(R.id.recurrence_radio_end_date);
+            limitInput.setVisibility(View.INVISIBLE);
+            endDateInput.setVisibility(View.VISIBLE);
         }
 
         else if(hasLimit) {
             rg.check(R.id.recurrence_radio_limit);
+            limitInput.setVisibility(View.VISIBLE);
+            endDateInput.setVisibility(View.INVISIBLE);
         }
 
         return;
@@ -1340,19 +1361,28 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 int endDateID = R.id.recurrence_radio_end_date;
                 int LimitId = R.id.recurrence_radio_limit;
 
+
+                EditText limitInput = (EditText) theView.findViewById(R.id.recurrence_limit);
+                EditText endDateInput = (EditText) theView.findViewById(R.id.recurring_end_date);
                 if(i == endlessId) {
                     rg.check(endlessId);
                     item.setEndless(true);
+                    limitInput.setVisibility(View.INVISIBLE);
+                    endDateInput.setVisibility(View.INVISIBLE);
                 }
 
                 else if(i == endDateID) {
                     rg.check(endDateID);
                     item.setHasEndDate(true);
+                    limitInput.setVisibility(View.INVISIBLE);
+                    endDateInput.setVisibility(View.VISIBLE);
                 }
 
                 else if(i == LimitId) {
                     rg.check(LimitId);
                     item.setHasLimit(true);
+                    endDateInput.setVisibility(View.INVISIBLE);
+                    limitInput.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -1415,15 +1445,39 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         int limit = item.getRecurrenceLimit();
         String limitStr = Integer.toString(limit);
 
-        if(limit == 0) {
-            limitStr = "0";
-        }
         user_input.setText(limitStr);
 
         return;
     }
 
     private void setLimitOnChangeListener(View v) {
+//        final ToDoItem item = mUserToDoItem;
+//        EditText user_input = (EditText) v.findViewById(R.id.recurrence_limit);
+//        user_input.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Log.d("limit", "text changed to " + s.toString() );
+//                int conversion = Integer.parseInt(s.toString());
+//
+//                try {
+//                    conversion = Integer.parseInt(s.toString());
+//                } catch (Exception e) {
+//                    Log.d("textchanged", e.toString());
+//                    conversion = 0;
+//                }
+////                item.setRecurrenceLimit(conversion);
+//            }
+//        });
+
 
         return;
     }
