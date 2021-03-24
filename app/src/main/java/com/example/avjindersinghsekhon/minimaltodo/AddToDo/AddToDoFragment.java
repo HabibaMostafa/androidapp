@@ -48,6 +48,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Reminder.RecurringFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -61,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -99,6 +101,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     //this is for add recurrance
     private Button recurBtn;
+    private boolean updateRecurringCalandar;
+    private boolean updateRecurringCalandarEnd;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -131,9 +135,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private static ToDoItem theToDoItem;
     private static Context theContext;
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        updateRecurringCalandar = false;
+        updateRecurringCalandarEnd = false;
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -202,6 +209,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
+        //display the current recurrence settings for this Item
+        updateRecurrenceUI(view);
+
 
 
 
@@ -264,7 +274,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
         if (mUserReminderDate == null) {
             mToDoDateSwitch.setChecked(false);
-            mReminderTextView.setVisibility(View.INVISIBLE);
+            mReminderTextView.setVisibility(View.GONE);
         }
 
 //        TextInputLayout til = (TextInputLayout)findViewById(R.id.toDoCustomTextInput);
@@ -364,6 +374,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoSendFloatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                update the limit.
+                ToDoItem item = mUserToDoItem;
+                Log.d("addtodo","has a limit?" + String.valueOf(item.getHasLimit()) );
+                if(item.getHasLimit()) {
+                    EditText user_input = (EditText) theView.findViewById(R.id.recurrence_limit);
+                    String inputted = user_input.getText().toString();
+                    Log.d("addtodo", "limit " + inputted);
+                    item.setRecurrenceLimit(Integer.parseInt(inputted));
+                }
+
                 if (mToDoTextBodyEditText.length() <= 0) {
                     mToDoTextBodyEditText.setError(getString(R.string.todo_error));
                 } else if (mUserReminderDate != null && mUserReminderDate.before(new Date())) {
@@ -395,19 +416,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 } else {
                     date = new Date();
                 }
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
                 if (theme.equals(MainFragment.DARKTHEME)) {
                     datePickerDialog.setThemeDark(true);
                 }
                 datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
-
             }
         });
 
@@ -717,6 +737,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         setDateEditText();
     }
 
+
     public void setTime(int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         if (mUserReminderDate != null) {
@@ -857,7 +878,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        setDate(year, month, day);
+        if(updateRecurringCalandar) {
+            setStartDate(year, month, day);
+            updateRecurringCalandar = false;
+        }
+
+        if(updateRecurringCalandarEnd) {
+            setEndDate(year, month, day);
+            updateRecurringCalandarEnd = false;
+        }
+        else {
+            setDate(year, month, day);
+        }
     }
 
     public void setEnterDateLayoutVisible(boolean checked) {
@@ -1068,4 +1100,429 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     String dateToString(Date date) {
         return "";
     }
+
+    private void setupIntervalSpinner(View the_view) {
+
+        ArrayList<String> intervals = new ArrayList<String>();
+        intervals.add("Day");
+        intervals.add("Week");
+        intervals.add("Two Weeks");
+        intervals.add("Month");
+        intervals.add("Year");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, intervals) {
+            //moves all labels to the center of the dropdown menu
+            //https://stackoverflow.com/questions/7511049/set-view-text-align-at-center-in-spinner-in-android
+            public View getView(int position, View convertView,ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                ((TextView) v).setTextSize(16);
+                return v;
+
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getDropDownView(position, convertView,parent);
+                ((TextView) v).setGravity(Gravity.CENTER);
+                return v;
+
+            }
+        };
+
+
+        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
+        final Spinner spinner = (Spinner)the_view.findViewById(R.id.repeat_spinner);
+        spinner.setAdapter(adapter);
+
+        ToDoItem item = mUserToDoItem;
+        theContext = getContext();
+        int selectedIndex = 0;
+
+        //check the ToDoItem and selected the saved interval (if there is one, else set default to day)
+        String interval = item.getInterval();
+        if(interval == null) {
+            item.setInterval("Day");
+        }
+        else {
+            if (interval.equals("Day")) {
+                selectedIndex = 0;
+            } else if (interval.equals("Week")) {
+                selectedIndex = 1;
+            } else if (interval.equals("Two Weeks")) {
+                selectedIndex = 2;
+            } else if (interval.equals("Month")) {
+                selectedIndex = 3;
+            } else if (interval.equals("Year")) {
+                selectedIndex = 4;
+            }
+        }
+
+        spinner.setSelection(selectedIndex, true);
+        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                switch(i) {
+                    case 0:
+                        mUserToDoItem.setInterval("Day");
+                        break;
+
+                    case 1:
+                        mUserToDoItem.setInterval("Week");
+                        break;
+
+                    case 2:
+                        mUserToDoItem.setInterval("Two Weeks");
+                        break;
+
+                    case 3:
+                        mUserToDoItem.setInterval("Month");
+                        break;
+
+                    case 4:
+                        mUserToDoItem.setInterval("Year");
+
+                        break;
+
+                    default:
+                        break;
+                }
+
+                spinner.setSelection(i, true);
+                return;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+        return;
+    }
+
+    //listens if the recurrence button is on or off and updates the item state
+    private void setRecurringOnListener(View v) {
+        SwitchCompat recurringSwitch = (SwitchCompat) v.findViewById(R.id.recurring_switch);
+        recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mUserToDoItem.setRecurring(true);
+                    // show the area
+
+                } else {
+                    mUserToDoItem.setRecurring(false);
+                    // maybe hide the area?
+                }
+            }
+        });
+        return;
+    }
+
+    private void updateStartDate(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText recurrenceStart = (EditText) v.findViewById(R.id.recurring_start_date);
+        Date savedDate = item.getStartDate();
+
+        //If no date was saved, set the date as today
+        if(savedDate == null) {
+            Date newDate = new Date();
+            item.setStartDate(newDate);
+        }
+
+        //update the UI to show the date
+        String dateToString = item.dateToStringNoTime(item.getStartDate());
+        recurrenceStart.setText(dateToString);
+
+        return;
+    }
+
+    // called when the start date calendar is modified.
+    public void setStartDate(int year, int month, int day) {
+
+        Calendar cal = new GregorianCalendar(year,month,day,00,00,00);
+        ToDoItem item = mUserToDoItem;
+        Date changedDate = cal.getTime();
+        item.setStartDate(changedDate);
+        updateStartDate(theView);
+        return;
+    }
+
+    public void setEndDate(int year, int month, int day) {
+
+        Calendar cal = new GregorianCalendar(year,month,day,00,00,00);
+        ToDoItem item = mUserToDoItem;
+        Date changedDate = cal.getTime();
+        item.setEndDate(changedDate);
+        updateEndDate(theView);
+        return;
+    }
+
+    // setup the date picker functionality
+    private void setStartDateListener(View v) {
+
+        EditText recurrenceStart = (EditText) v.findViewById(R.id.recurring_start_date);
+
+        recurrenceStart.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToDoItem item = mUserToDoItem;
+                Date savedDate = item.getStartDate();
+
+                //If no date was saved, set the date as today
+                if(savedDate == null) {
+                    Date newDate = new Date();
+                    item.setStartDate(newDate);
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(savedDate);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
+                if (theme.equals(MainFragment.DARKTHEME)) {
+                    datePickerDialog.setThemeDark(true);
+                }
+                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+                updateRecurringCalandar = true;
+            }
+        });
+
+        return;
+    }
+
+//    checks what the existing end condition is set in the ToDo Item.
+    private void updateEndCondition(View v) {
+        RadioGroup rg = (RadioGroup) v.findViewById(R.id.recurring_end_group);
+        rg.clearCheck();
+        rg.check(R.id.recurrence_radio_endless);
+        ToDoItem item = mUserToDoItem;
+
+        boolean isEndless = item.getEndless();
+        boolean hasEndDate = item.getHasEndDate();
+        boolean hasLimit = item.getHasLimit();
+
+        // check if all are false
+        boolean allFalse = false;
+        if (isEndless==false && hasEndDate==false && hasLimit==false) {
+            allFalse = true;
+            Log.d("radio", "all false");
+        }
+
+        Log.d("radio", "checked if false");
+
+        EditText limitInput = (EditText) v.findViewById(R.id.recurrence_limit);
+        EditText endDateInput = (EditText) v.findViewById(R.id.recurring_end_date);
+        limitInput.setVisibility(View.INVISIBLE);
+        endDateInput.setVisibility(View.INVISIBLE);
+
+        // if all are endless, just set the default (Endless)
+        if(allFalse) {
+            item.setEndless(true);
+        }
+
+        //check off the selected radio button according to what is saved in the item
+        if(isEndless) {
+            rg.check(R.id.recurrence_radio_endless);
+            limitInput.setVisibility(View.INVISIBLE);
+            endDateInput.setVisibility(View.INVISIBLE);
+        }
+
+        else if(hasEndDate) {
+            rg.check(R.id.recurrence_radio_end_date);
+            limitInput.setVisibility(View.INVISIBLE);
+            endDateInput.setVisibility(View.VISIBLE);
+        }
+
+        else if(hasLimit) {
+            rg.check(R.id.recurrence_radio_limit);
+            limitInput.setVisibility(View.VISIBLE);
+            endDateInput.setVisibility(View.INVISIBLE);
+        }
+
+        return;
+    }
+
+    public void setEndConditionListener(View v) {
+        final RadioGroup rg = (RadioGroup) v.findViewById(R.id.recurring_end_group);
+        int selected = rg.getCheckedRadioButtonId();
+        RadioButton sel = (RadioButton) v.findViewById(selected);
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioBtn = (RadioButton)radioGroup.findViewById(i);
+                boolean isSelected = checkedRadioBtn.isChecked();
+                ToDoItem item = mUserToDoItem;
+//                Log.d("radio","picked " + Integer.toString(i));
+
+                int endlessId = R.id.recurrence_radio_endless;
+                int endDateID = R.id.recurrence_radio_end_date;
+                int LimitId = R.id.recurrence_radio_limit;
+
+
+                EditText limitInput = (EditText) theView.findViewById(R.id.recurrence_limit);
+                EditText endDateInput = (EditText) theView.findViewById(R.id.recurring_end_date);
+                if(i == endlessId) {
+                    rg.check(endlessId);
+                    item.setEndless(true);
+                    limitInput.setVisibility(View.INVISIBLE);
+                    endDateInput.setVisibility(View.INVISIBLE);
+                }
+
+                else if(i == endDateID) {
+                    rg.check(endDateID);
+                    item.setHasEndDate(true);
+                    limitInput.setVisibility(View.INVISIBLE);
+                    endDateInput.setVisibility(View.VISIBLE);
+                }
+
+                else if(i == LimitId) {
+                    rg.check(LimitId);
+                    item.setHasLimit(true);
+                    endDateInput.setVisibility(View.INVISIBLE);
+                    limitInput.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        return;
+    }
+
+    //update the start date
+    private void updateEndDate(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText recurrenceEnd = (EditText) v.findViewById(R.id.recurring_end_date);
+        Date savedDate = item.getEndDate();
+
+        //If no date was saved, set the date as today
+        if(savedDate == null) {
+            Date newDate = new Date();
+            item.setEndDate(newDate);
+        }
+        //update the UI to show the date
+        String dateToString = item.dateToStringNoTime(item.getEndDate());
+        recurrenceEnd.setText(dateToString);
+
+        return;
+    }
+
+    private void setEndDateListener(View v) {
+        EditText recurrenceEnd = (EditText) v.findViewById(R.id.recurring_end_date);
+        recurrenceEnd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToDoItem item = mUserToDoItem;
+                Date savedDate = item.getEndDate();
+
+                //If no date was saved, set the date as today
+                if(savedDate == null) {
+                    Date newDate = new Date();
+                    item.setStartDate(newDate);
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(savedDate);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
+                if (theme.equals(MainFragment.DARKTHEME)) {
+                    datePickerDialog.setThemeDark(true);
+                }
+                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+                updateRecurringCalandarEnd = true;
+            }
+        });
+
+        return;
+    }
+
+    private void updateLimitValue(View v) {
+        ToDoItem item = mUserToDoItem;
+        EditText user_input = (EditText) v.findViewById(R.id.recurrence_limit);
+        int limit = item.getRecurrenceLimit();
+        String limitStr = Integer.toString(limit);
+
+        user_input.setText(limitStr);
+
+        return;
+    }
+
+    private void setLimitOnChangeListener(View v) {
+//        final ToDoItem item = mUserToDoItem;
+//        EditText user_input = (EditText) v.findViewById(R.id.recurrence_limit);
+//        user_input.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Log.d("limit", "text changed to " + s.toString() );
+//                int conversion = Integer.parseInt(s.toString());
+//
+//                try {
+//                    conversion = Integer.parseInt(s.toString());
+//                } catch (Exception e) {
+//                    Log.d("textchanged", e.toString());
+//                    conversion = 0;
+//                }
+////                item.setRecurrenceLimit(conversion);
+//            }
+//        });
+
+
+        return;
+    }
+    private void updateRecurrenceUI(View v) {
+        ToDoItem item = mUserToDoItem;
+
+        //update the recurrence on switch.
+        SwitchCompat recurringSwitch = (SwitchCompat) v.findViewById(R.id.recurring_switch);
+        recurringSwitch.setChecked(item.getRecurring());
+
+        //update the start date
+        updateStartDate(v);
+
+        //set a listener for the start date
+        setStartDateListener(v);
+
+        //set a listener for the switch
+        setRecurringOnListener(v);
+
+        //populate the recurrence repeat interval spinner update and set listener
+        setupIntervalSpinner(v);
+
+        //update the selected radio button
+        updateEndCondition(v);
+
+        //set the end condition radio listener
+        setEndConditionListener(v);
+
+        //update the end date
+        updateEndDate(v);
+
+        //set the end date listener
+        setEndDateListener(v);
+
+        // update the limit value
+        updateLimitValue(v);
+
+        //create on change listener.
+        setLimitOnChangeListener(v);
+
+
+        return;
+    }
+
+
+
+
 }
