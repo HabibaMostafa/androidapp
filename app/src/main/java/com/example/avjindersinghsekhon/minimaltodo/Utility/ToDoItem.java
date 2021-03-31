@@ -485,5 +485,17 @@ public class ToDoItem implements Serializable {
         converted = df.format(date);
         return converted;
     }
+
+    // pattern is a date format like "MM/dd/yyyy"
+    public String dateToStringNoTime(Date date, String pattern) {
+        String converted = "";
+
+        if(date == null) {
+            return "null";
+        }
+        DateFormat df = new SimpleDateFormat(pattern);
+        converted = df.format(date);
+        return converted;
+    }
 }
 

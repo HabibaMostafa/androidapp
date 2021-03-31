@@ -502,8 +502,6 @@ public class MainFragment extends AppDefaultFragment {
             if (!existed) {
                 addToDataStore(item);
             }
-
-
         }
     }
 
@@ -638,7 +636,9 @@ public class MainFragment extends AppDefaultFragment {
             // my code 
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
-            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
+            String dateFormatted = item.dateToStringNoTime(item.getStartDate(), "MM/dd/yyyy");
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + dateFormatted);
+            //holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
             // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
