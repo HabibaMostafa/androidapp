@@ -146,10 +146,12 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
         doneRecurring.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(getActivity(), AddToDoActivity.class);
-                in.putExtra("Days", recurringDays.getText().toString());
-                startActivity(in);
+//                Intent in = new Intent(getActivity(), AddToDoActivity.class);
+//                in.putExtra("Days", recurringDays.getText().toString());
+//                startActivity(in);
 //                finish();
+
+                getActivity().finish();
             }
         });
 
@@ -157,8 +159,9 @@ public class RecurringFragment extends Fragment implements DatePickerDialog.OnDa
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cancelIntent = new Intent(getActivity(),  AddToDoActivity.class);
-                startActivity(cancelIntent);
+//                Intent cancelIntent = new Intent(getActivity(),  AddToDoActivity.class);
+//                startActivity(cancelIntent);
+                getActivity().finish();
             }
         });
 
