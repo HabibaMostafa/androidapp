@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="@string/calender_view"
+        android:text="@string/calendar_view"
         android:textSize="35sp" />
 
     <!--    <LinearLayout-->
@@ -41,13 +41,13 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="35dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/bg_calender">
+        android:background="@drawable/bg_calendar">
 
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dateTextAppearance="@style/CalenderStyle"
+            android:dateTextAppearance="@style/CalendarStyle"
             android:weekDayTextAppearance="@style/CustomDialog"
             tools:visibility="visible" />
     </LinearLayout>

@@ -396,7 +396,8 @@
                                             android:focusable="false"
                                             android:focusableInTouchMode="false"
                                             android:gravity="center"
-                                            android:textIsSelectable="false" />
+                                            android:textIsSelectable="false"
+                                            android:visibility="visible" />
 
                                         <EditText
                                             android:id="@+id/recurrence_limit"
@@ -407,7 +408,8 @@
                                             android:lines="1"
                                             android:maxLines="1"
                                             android:scrollbars="vertical"
-                                            android:textColor="@color/icons" />
+                                            android:textColor="@color/icons"
+                                            android:visibility="visible" />
 
                                     </LinearLayout>
 
@@ -437,12 +439,14 @@
 
                                 <ImageButton
                                     android:id="@+id/userToDoReminderIconImageButton"
-                                    android:layout_width="0dp"
+                                    android:layout_width="5dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".4"
                                     android:background="@android:color/transparent"
                                     android:padding="8dp"
-                                    android:src="@drawable/ic_add_alarm_grey_200_24dp" />
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/ic_add_alarm_grey_200_24dp"
+                                    android:tint="#B1B1B1" />
 
                                 <TextView
                                     android:id="@+id/userToDoRemindMeTextView"
@@ -559,7 +563,7 @@
                                 android:textColor="@color/primary_ligher"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
-                                android:visibility="visible" />
+                                android:visibility="invisible" />
 
 
                         </LinearLayout>
