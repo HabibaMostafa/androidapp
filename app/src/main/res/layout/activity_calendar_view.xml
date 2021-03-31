@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/calender_view"
+        android:text="@string/calendar_view"
         android:textSize="35sp"
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-condensed-medium"
@@ -45,7 +45,7 @@
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dateTextAppearance="@style/CalenderStyle"
+            android:dateTextAppearance="@style/CalendarStyle"
             android:weekDayTextAppearance="@style/cal_week_col"
             tools:visibility="visible" />
 

@@ -312,7 +312,7 @@ public class MainFragment extends AppDefaultFragment {
                     if (CalendarDate.getSelectedDate().contains("noData")){
                         itemstoReturn.add(item);
                     }
-                    else if (item.getToDoDate() != null) {
+                    else if (item.getStartDate() != null) {
 
                         //strip ending from selected date for search.
                         String temp = "temp";
@@ -322,7 +322,7 @@ public class MainFragment extends AppDefaultFragment {
                         }
 
                         //search to see if dates match
-                        String todoDate = item.getToDoDate().toString();
+                        String todoDate = item.getStartDate().toString();
                         if (todoDate.contains(temp)){
                             itemstoReturn.add(item);
                         }
@@ -402,6 +402,10 @@ public class MainFragment extends AppDefaultFragment {
 
 
         }
+    }
+
+    public void resetCalendar() {
+        getActivity().recreate();
     }
 
     private void setAlarms() {
@@ -633,7 +637,8 @@ public class MainFragment extends AppDefaultFragment {
 
             // my code 
             // holder.mToDoTextview.setMaxLines(2);
-            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+            // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
             // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
