@@ -112,7 +112,7 @@ public class ToDoItem implements Serializable {
         timesRecurred = 0;
         recurrenceLimit = 0;
 
-        isRecurring = true;
+//        isRecurring = false;
 
         recurringDates = new ArrayList<Date>();
 

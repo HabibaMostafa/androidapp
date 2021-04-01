@@ -100,7 +100,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Button mCopyClipboard;
 
     //this is for add recurrance
-    private Button recurBtn;
+//    private Button recurBtn;
     private boolean updateRecurringCalandar;
     private boolean updateRecurringCalandarEnd;
 
@@ -608,16 +608,16 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
-        recurBtn = (Button) view.findViewById(R.id.recrBtn);
-
-        recurBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getActivity(), RecurringActivity.class);
-                startActivity(intent);
-            }
-        });
+//        recurBtn = (Button) view.findViewById(R.id.recrBtn);
+//
+//        recurBtn.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(getActivity(), RecurringActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 
@@ -920,7 +920,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         if (checked) {
             mUserDateSpinnerContainingLinearLayout.setVisibility(View.VISIBLE);
         } else {
-            mUserDateSpinnerContainingLinearLayout.setVisibility(View.INVISIBLE);
+            mUserDateSpinnerContainingLinearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -957,7 +957,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mUserDateSpinnerContainingLinearLayout.setVisibility(View.INVISIBLE);
+                            mUserDateSpinnerContainingLinearLayout.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -1227,16 +1227,20 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     //listens if the recurrence button is on or off and updates the item state
     private void setRecurringOnListener(View v) {
         SwitchCompat recurringSwitch = (SwitchCompat) v.findViewById(R.id.recurring_switch);
+        final LinearLayout recurringLayout = (LinearLayout) v.findViewById(R.id.recurring_date_picker);
+
         recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mUserToDoItem.setRecurring(true);
                     // show the area
+                    recurringLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     mUserToDoItem.setRecurring(false);
                     // maybe hide the area?
+                    recurringLayout.setVisibility(View.GONE);
                 }
             }
         });
