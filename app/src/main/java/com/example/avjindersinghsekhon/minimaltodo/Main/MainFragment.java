@@ -672,6 +672,11 @@ public class MainFragment extends AppDefaultFragment {
                 holder.mTimeTextView.setText(timeToShow);
             }
 
+            if (item.getRecurring() == true) {
+
+
+            }
+
 
         }
 
