@@ -35,7 +35,7 @@ public class MainActivity extends AppDefaultActivity {
                 if (CalendarDate.getSelectedDate().contains("00:00:00")){
                     String remove = "00:00:00 EDT 2021";
                     date = CalendarDate.getSelectedDate().substring(0, CalendarDate.getSelectedDate().length() - remove.length());
-                    setActionBarText("Minimal:  " + date);
+                    setActionBarText("Minimal ToDo:  " + date);
                 }
             }
         }
