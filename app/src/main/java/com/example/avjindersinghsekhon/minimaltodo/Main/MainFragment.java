@@ -196,6 +196,8 @@ public class MainFragment extends AppDefaultFragment {
 //                startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM, options.toBundle());
 
                 startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM);
+
+
             }
         });
 
@@ -258,7 +260,6 @@ public class MainFragment extends AppDefaultFragment {
         // save labels to disk
 
         try {
-            
             labelData.saveLabels(labelList);
         } catch (Exception e) {
             Log.d("label", e.toString());
@@ -503,6 +504,15 @@ public class MainFragment extends AppDefaultFragment {
                 addToDataStore(item);
             }
         }
+
+
+
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private AlarmManager getAlarmManager() {
@@ -736,20 +746,29 @@ public class MainFragment extends AppDefaultFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
+
         try {
             storeRetrieveData.saveToFile(mStoredArrayList);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
+
+        super.onPause();
+
     }
 
 
     @Override
     public void onDestroy() {
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
 
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
+
     }
 
 

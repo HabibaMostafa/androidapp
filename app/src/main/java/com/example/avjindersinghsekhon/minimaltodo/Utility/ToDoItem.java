@@ -99,7 +99,7 @@ public class ToDoItem implements Serializable {
         endDate = new Date();
 //        }
 //        if(interval == null) {
-        interval = "";
+        interval = "Day";
 //        }
         isEndless = false;
         hasStartDate = false;
@@ -112,19 +112,12 @@ public class ToDoItem implements Serializable {
         timesRecurred = 0;
         recurrenceLimit = 0;
 
-        isRecurring = true;
+        isRecurring = false;
 
         recurringDates = new ArrayList<Date>();
 
 
         //debug to test json writing
-        Date new1 = new Date();
-        Date new2 = new Date();
-        Date new3 = new Date();
-        recurringDates.add(new1);
-        recurringDates.add(new2);
-        recurringDates.add(new3);
-
     }
 
 
@@ -175,17 +168,17 @@ public class ToDoItem implements Serializable {
             this.isRecurring = false;
         }
 
-//        if(this.isRecurring) {
-            this.startDate = stringToDate(jsonObject.getString(RECURRENCE_START));
-            this.endDate = stringToDate(jsonObject.getString(RECURRENCE_END));
-            this.interval = jsonObject.getString(RECURRENCE_INTERVAL);
-            this.isEndless = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_ENDLESS));
-            this.hasStartDate = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_START));
-            this.hasEndDate = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_END));
-            this.hasLimit = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_LIMIT));
-            this.timesRecurred = Integer.parseInt(jsonObject.getString(RECURRENCE_AMT));
-            this.recurrenceLimit = Integer.parseInt(jsonObject.getString(RECURRENCE_LIMIT));
-//        }
+
+        this.startDate = stringToDate(jsonObject.getString(RECURRENCE_START));
+        this.endDate = stringToDate(jsonObject.getString(RECURRENCE_END));
+        this.interval = jsonObject.getString(RECURRENCE_INTERVAL);
+        this.isEndless = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_ENDLESS));
+        this.hasStartDate = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_START));
+        this.hasEndDate = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_END));
+        this.hasLimit = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_HAS_LIMIT));
+        this.timesRecurred = Integer.parseInt(jsonObject.getString(RECURRENCE_AMT));
+        this.recurrenceLimit = Integer.parseInt(jsonObject.getString(RECURRENCE_LIMIT));
+
 
 
         if(this.isRecurring) {
@@ -201,11 +194,11 @@ public class ToDoItem implements Serializable {
                 recurringDates.add(aDate);
             }
 
-            for(int i = 0; i < recurringDates.size(); i++ ) {
-                Log.d("dates", "Date " + Integer.toString(i+1) +":"+ dateToString(recurringDates.get(i)));
-
-            }
-            Log.d("dates","");
+//            for(int i = 0; i < recurringDates.size(); i++ ) {
+//                Log.d("dates", "Date " + Integer.toString(i+1) +":"+ dateToString(recurringDates.get(i)));
+//
+//            }
+//            Log.d("dates","");
 
 
         }
@@ -532,7 +525,18 @@ public class ToDoItem implements Serializable {
     }
 
     public void setRecurrenceLimit(int newlimit) {
-        this.recurrenceLimit = newlimit;
+
+        if (newlimit > 50) {
+            this.recurrenceLimit = 50;
+        }
+
+        else if (newlimit < 1) {
+            this.recurrenceLimit = 1;
+        }
+
+        else {
+             this.recurrenceLimit = newlimit;
+        }
     }
 
     public String dateToStringNoTime(Date date) {
@@ -565,22 +569,109 @@ public class ToDoItem implements Serializable {
         // check what the recurrence interval is.
         int maxLength = 50;
 
-//        cal.add(Calendar.MONTH, 1);
+
         recurringDates = new ArrayList<Date>();
-
         Date lastDate = this.startDate;
-        for(int i = 0; i < 50; i++) {
-
+        for(int i = 0; i < maxLength; i++) {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
-            c.add(Calendar.DATE, 1); // add one day for now
-            recurringDates.add(c.getTime());
 
+            if(this.interval.equals("Day")) {
+                c.add(Calendar.DATE, 1); // add one day for now
+            }
+            else if(this.interval.equals("Week")) {
+                c.add(Calendar.DATE, 7); // add one day for now
+            }
+            else if(this.interval.equals("Two Weeks")) {
+                c.add(Calendar.DATE, 14); // add one day for now
+            }
+            else if(this.interval.equals("Month")) {
+                c.add(Calendar.MONTH, 1); // add one day for now
+            }
+            else if(this.interval.equals("Year")) {
+                c.add(Calendar.YEAR, 1); // add one day for now
+            }
+
+            recurringDates.add(c.getTime());
             lastDate = c.getTime();
         }
 
+        return;
+    }
+
+    public void setupRecurrenceWithEndDate() {
+        int maxLength = 50;
 
 
+        recurringDates = new ArrayList<Date>();
+        Date lastDate = this.startDate;
+        for(int i = 0; i < maxLength; i++) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(lastDate);
+
+            if(this.interval.equals("Day")) {
+                c.add(Calendar.DATE, 1); // add one day for now
+            }
+            else if(this.interval.equals("Week")) {
+                c.add(Calendar.DATE, 7); // add one day for now
+            }
+            else if(this.interval.equals("Two Weeks")) {
+                c.add(Calendar.DATE, 14); // add one day for now
+            }
+            else if(this.interval.equals("Month")) {
+                c.add(Calendar.MONTH, 1); // add one day for now
+            }
+            else if(this.interval.equals("Year")) {
+                c.add(Calendar.YEAR, 1); // add one day for now
+            }
+
+            Date nextDate = c.getTime();
+
+            // need to add one day so the end date is included in the array
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(this.endDate);
+            cal.add(Calendar.DATE, 1);
+            Date checkDate = cal.getTime();
+
+            if(nextDate.after(checkDate)) {
+                break;
+            }
+            else {
+                recurringDates.add(nextDate);
+                lastDate = c.getTime();
+            }
+        }
+
+        return;
+    }
+
+    public void setupRecurrenceWithLimit() {
+        recurringDates = new ArrayList<Date>();
+        Date lastDate = this.startDate;
+
+        for(int i = 0; i < this.recurrenceLimit; i++) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(lastDate);
+
+            if(this.interval.equals("Day")) {
+                c.add(Calendar.DATE, 1); // add one day for now
+            }
+            else if(this.interval.equals("Week")) {
+                c.add(Calendar.DATE, 7); // add one day for now
+            }
+            else if(this.interval.equals("Two Weeks")) {
+                c.add(Calendar.DATE, 14); // add one day for now
+            }
+            else if(this.interval.equals("Month")) {
+                c.add(Calendar.MONTH, 1); // add one day for now
+            }
+            else if(this.interval.equals("Year")) {
+                c.add(Calendar.YEAR, 1); // add one day for now
+            }
+
+            recurringDates.add(c.getTime());
+            lastDate = c.getTime();
+        }
         return;
     }
 
@@ -591,15 +682,41 @@ public class ToDoItem implements Serializable {
 
         // check if this item is recurring. if not, just quit
         if(!isRecurring) {
+            Log.d("dates", "not recurring");
             return;
         }
 
         // check type of recurrence.
-        if(isEndless) {
+        if(this.isEndless) {
             setupEndlessRecurrence();
         }
 
+        else if (this.hasEndDate) {
+            setupRecurrenceWithEndDate();
+        }
+
+        else if (this.hasLimit) {
+            setupRecurrenceWithLimit();
+        }
+
+
+        //debug print to see if the dates are being printed correctly
+        Log.d("dates","-----");
+        for(int i = 0; i < this.recurringDates.size(); i++ ) {
+            Log.d("dates", "Date " + Integer.toString(i+1) +":"+ dateToString(this.recurringDates.get(i)));
+
+        }
+        Log.d("dates","-----");
         return;
+    }
+
+    public void setRecurringDates(ArrayList<Date> dates) {
+        this.recurringDates = dates;
+        return;
+    }
+
+    public ArrayList<Date> getRecurringDates() {
+        return this.recurringDates;
     }
 
 
