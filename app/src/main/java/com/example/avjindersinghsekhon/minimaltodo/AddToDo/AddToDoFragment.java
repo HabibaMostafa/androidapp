@@ -417,6 +417,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 } else {
                     app.send(this, "Action", "Make Todo");
                     makeResult(RESULT_OK);
+
+                    item.populateRecurringDates();
                     getActivity().finish();
                 }
                 hideKeyboard(mToDoTextBodyEditText);
@@ -638,6 +640,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         // get the current date and set dateCreated to the current date.
+
 
         return;
 

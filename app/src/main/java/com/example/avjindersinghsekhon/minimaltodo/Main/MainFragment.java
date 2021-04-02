@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +29,6 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v7.app.ActionBar;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -105,6 +103,7 @@ public class MainFragment extends AppDefaultFragment {
             "Get car washed",
             "Get my dry cleaning"
     };
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -204,6 +203,8 @@ public class MainFragment extends AppDefaultFragment {
 //                startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM, options.toBundle());
 
                 startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM);
+
+
             }
         });
 
@@ -266,7 +267,6 @@ public class MainFragment extends AppDefaultFragment {
         // save labels to disk
 
         try {
-
             labelData.saveLabels(labelList);
         } catch (Exception e) {
             Log.d("label", e.toString());
@@ -510,9 +510,16 @@ public class MainFragment extends AppDefaultFragment {
             if (!existed) {
                 addToDataStore(item);
             }
-
-
         }
+
+
+
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private AlarmManager getAlarmManager() {
@@ -650,7 +657,9 @@ public class MainFragment extends AppDefaultFragment {
             // my code 
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
-            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
+            String dateFormatted = item.dateToStringNoTime(item.getStartDate(), "MM/dd/yyyy");
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + dateFormatted);
+            //holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
             // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
@@ -766,14 +775,23 @@ public class MainFragment extends AppDefaultFragment {
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
+
+        super.onPause();
+
     }
 
 
     @Override
     public void onDestroy() {
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
 
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
+
     }
 
 
