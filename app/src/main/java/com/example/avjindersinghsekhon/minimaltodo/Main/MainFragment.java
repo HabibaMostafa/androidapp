@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.support.v7.app.ActionBar;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -104,11 +106,10 @@ public class MainFragment extends AppDefaultFragment {
             "Get my dry cleaning"
     };
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        
+
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -265,7 +266,7 @@ public class MainFragment extends AppDefaultFragment {
         // save labels to disk
 
         try {
-            
+
             labelData.saveLabels(labelList);
         } catch (Exception e) {
             Log.d("label", e.toString());
@@ -309,7 +310,7 @@ public class MainFragment extends AppDefaultFragment {
             e.printStackTrace();
         }
 
-        
+
         if (items != null){
             if (CalendarDate.dateChanged){
                 itemstoReturn = new ArrayList<>();
@@ -681,11 +682,6 @@ public class MainFragment extends AppDefaultFragment {
                     timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_12_HOUR, item.getToDoDate());
                 }
                 holder.mTimeTextView.setText(timeToShow);
-            }
-
-            if (item.getRecurring() == true) {
-
-
             }
 
 

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +36,7 @@ public class calendarViewActivity extends AppCompatActivity {
 
     private static final String TAG = "calendarViewActivity";
     private CalendarView mCalendarView;
-    private Button mReset;
+    private FloatingActionButton mReset;
     private Toolbar ctoolbar;
     String theme;
 
@@ -60,6 +61,7 @@ public class calendarViewActivity extends AppCompatActivity {
         * create the back arrow and get the actionBar
         * */
         final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        final Drawable filterButton = getResources().getDrawable(R.drawable.ic_filter_white_24dp);
 
         ctoolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(ctoolbar);
@@ -84,7 +86,7 @@ public class calendarViewActivity extends AppCompatActivity {
 //        });
 
         //Alex - on click function for reset date button
-        mReset = (Button) findViewById(R.id.btnReset);
+        mReset = (FloatingActionButton) findViewById(R.id.resetDateButton);
         mReset.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -137,6 +139,10 @@ public class calendarViewActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void resetDate() {
+
     }
 
     /*
