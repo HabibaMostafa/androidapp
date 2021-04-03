@@ -431,7 +431,7 @@
                                 android:layout_marginLeft="36dp"
                                 android:layout_marginEnd="36dp"
                                 android:layout_marginRight="36dp"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="20dp"
                                 android:layout_weight=".5"
                                 android:visibility="gone"
                                 android:orientation="vertical">
@@ -457,6 +457,17 @@
 
                                     <EditText
                                         android:id="@+id/recurring_start_date"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1.5"
+                                        android:editable="false"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:gravity="center"
+                                        android:textIsSelectable="false" />
+
+                                    <EditText
+                                        android:id="@+id/recurring_start_time"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1.5"
@@ -506,13 +517,17 @@
                                     android:id="@+id/recurring_end_container"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="15dp"
+                                    >
 
                                     <RadioGroup
                                         android:id="@+id/recurring_end_group"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:paddingLeft="15dp">
+                                        android:layout_marginTop="10dp"
+
+                                        >
 
                                         <RadioButton
                                             android:id="@+id/recurrence_radio_endless"
@@ -530,37 +545,42 @@
                                             android:id="@+id/recurrence_radio_limit"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:text="Maximum Recurrences:  " />
+                                            android:text="Maximum Recurrences:  "
+                                            />
                                     </RadioGroup>
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:layout_marginTop="35dp"
+                                        >
 
                                         <EditText
                                             android:id="@+id/recurring_end_date"
                                             android:layout_width="match_parent"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="1"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".5"
                                             android:editable="false"
                                             android:focusable="false"
                                             android:focusableInTouchMode="false"
-                                            android:gravity="center"
+
                                             android:textIsSelectable="false"
-                                            android:visibility="visible" />
+                                            android:visibility="visible"
+                                            />
 
                                         <EditText
                                             android:id="@+id/recurrence_limit"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:gravity="start|bottom"
+                                            android:gravity="center"
                                             android:inputType="number"
                                             android:lines="1"
                                             android:maxLines="1"
                                             android:scrollbars="vertical"
                                             android:textColor="@color/icons"
-                                            android:visibility="visible" />
+                                            android:visibility="visible"
+                                            android:padding="5dp"/>
 
                                     </LinearLayout>
 

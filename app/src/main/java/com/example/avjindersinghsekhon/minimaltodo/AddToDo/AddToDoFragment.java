@@ -103,6 +103,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //    private Button recurBtn;
     private boolean updateRecurringCalandar;
     private boolean updateRecurringCalandarEnd;
+    private boolean updateRecurringCalandarTime;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -141,6 +142,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         updateRecurringCalandar = false;
         updateRecurringCalandarEnd = false;
+        updateRecurringCalandarTime = false;
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -1273,6 +1275,33 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         Date changedDate = cal.getTime();
         item.setStartDate(changedDate);
         updateStartDate(theView);
+        updateStartEditTime(theView);
+        return;
+    }
+
+    public void updateStartEditTime(View view){
+
+        EditText startTimeEditText = (EditText) view.findViewById(R.id.recurring_start_time);
+
+        ToDoItem item = mUserToDoItem;
+        Date savedDate = item.getStartDate();
+
+        if(savedDate == null) {
+            Date newDate = new Date();
+            item.setStartDate(newDate);
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(savedDate);
+
+        int hour = calendar.HOUR_OF_DAY;
+        int minute = calendar.MINUTE;
+
+        String timeFormatString = hour + " : " + minute;
+
+        startTimeEditText.setText(timeFormatString);
+
+
         return;
     }
 
@@ -1290,23 +1319,28 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private void setStartDateListener(View v) {
 
         EditText recurrenceStart = (EditText) v.findViewById(R.id.recurring_start_date);
+        EditText recurrenceStartTime = (EditText) v.findViewById(R.id.recurring_start_time);
+        final ToDoItem item = mUserToDoItem;
+        final Date savedDate = item.getStartDate();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(savedDate);
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
 
         recurrenceStart.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToDoItem item = mUserToDoItem;
-                Date savedDate = item.getStartDate();
 
                 //If no date was saved, set the date as today
                 if(savedDate == null) {
                     Date newDate = new Date();
                     item.setStartDate(newDate);
                 }
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(savedDate);
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
                 if (theme.equals(MainFragment.DARKTHEME)) {
@@ -1317,8 +1351,61 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             }
         });
 
+        recurrenceStartTime.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(savedDate == null) {
+                    Date newDate = new Date();
+                    item.setStartDate(newDate);
+                }
+
+                TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoFragment.this, hour, minute, DateFormat.is24HourFormat(getContext()));
+                if (theme.equals(MainFragment.DARKTHEME)) {
+                    timePickerDialog.setThemeDark(true);
+                }
+                timePickerDialog.show(getActivity().getFragmentManager(), "TimeFragment");
+                updateRecurringCalandarTime = true;
+            }
+        });
+
+
+
         return;
     }
+
+//    private void setStartTimeListener(View vi){
+//            EditText recurrenceStartTime = (EditText) vi.findViewById(R.id.recurring_start_time);
+//
+//            recurrenceStartTime.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    ToDoItem item = mUserToDoItem;
+//                    Date svDate = item.getStartDate();
+//
+//                    if(svDate == null) {
+//                        Date newDate = new Date();
+//                        item.setStartDate(newDate);
+//                    }
+//
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(svDate);
+//
+//                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                    int minute = calendar.get(Calendar.MINUTE);
+//
+//                    TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoFragment.this, hour, minute, DateFormat.is24HourFormat(getContext()));
+//                    if (theme.equals(MainFragment.DARKTHEME)) {
+//                        timePickerDialog.setThemeDark(true);
+//                    }
+//                    timePickerDialog.show(getActivity().getFragmentManager(), "TimeFragment");
+//                    updateRecurringCalandarTime = true;
+//                }
+//            });
+//
+//
+//        return;
+//    }
 
 //    checks what the existing end condition is set in the ToDo Item.
     private void updateEndCondition(View v) {
@@ -1521,6 +1608,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //set a listener for the start date
         setStartDateListener(v);
+
+        /**
+         * listener for start time
+         */
+//        setStartTimeListener(v);
+
+        updateStartEditTime(v);
+
 
         //set a listener for the switch
         setRecurringOnListener(v);

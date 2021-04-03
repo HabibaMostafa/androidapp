@@ -46,7 +46,11 @@ public class ToDoItem implements Serializable {
     private int timesRecurred;
     private int recurrenceLimit;
 
+    private String startTime;
+    private Boolean hasStartTime;
+
     private static final String RECURRENCE_START = "recurrence_start";
+    private static final String RECURRENCE_START_TIME = "recurrence_start_time";
     private static final String RECURRENCE_END = "recurrence_end";
     private static final String RECURRENCE_INTERVAL = "recurrence_interval";
     private static final String RECURRENCE_ON = "recurrence_on";
@@ -95,6 +99,8 @@ public class ToDoItem implements Serializable {
 //        if(startDate == null) {
         startDate = new Date();
 //        }
+        startTime = String.valueOf(startDate.getTime());
+
 //        if(endDate == null) {
         endDate = new Date();
 //        }
@@ -177,6 +183,7 @@ public class ToDoItem implements Serializable {
 
 //        if(this.isRecurring) {
             this.startDate = stringToDate(jsonObject.getString(RECURRENCE_START));
+            this.startTime = jsonObject.getString(startTime);
             this.endDate = stringToDate(jsonObject.getString(RECURRENCE_END));
             this.interval = jsonObject.getString(RECURRENCE_INTERVAL);
             this.isEndless = Boolean.parseBoolean(jsonObject.getString(RECURRENCE_ENDLESS));
@@ -243,6 +250,8 @@ public class ToDoItem implements Serializable {
 
         // add the recurrence information to the JSON file
         jsonObject.put(RECURRENCE_START, dateToString(startDate));
+        //add time
+        jsonObject.put(RECURRENCE_START_TIME, startTime);
         jsonObject.put(RECURRENCE_END, dateToString(endDate));
         jsonObject.put(RECURRENCE_INTERVAL, interval);
         jsonObject.put(RECURRENCE_ON, String.valueOf(isRecurring));
@@ -427,6 +436,14 @@ public class ToDoItem implements Serializable {
 
     public Date getEndDate() {
         return endDate;
+    }
+
+    public void setStartTime(String startTime){
+        this.startTime = startTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
     }
 
     public void setEndDate(Date endDate) {
