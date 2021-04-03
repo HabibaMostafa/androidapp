@@ -502,6 +502,8 @@ public class MainFragment extends AppDefaultFragment {
             for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
                 if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
                     mToDoItemsArrayList.set(i, item);
+                    //update stored item list when an item has been edited.
+                    updateStoredList(item);
                     existed = true;
                     adapter.notifyDataSetChanged();
                     break;
@@ -818,5 +820,15 @@ public class MainFragment extends AppDefaultFragment {
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+    //update stored item list when an item has been edited.
+    public void updateStoredList(ToDoItem item){
+        for (int i = 0; i < mStoredArrayList.size(); i++) {
+            if (item.getIdentifier().equals(mStoredArrayList.get(i).getIdentifier())) {
+                mStoredArrayList.set(i, item);
+                break;
+            }
+        }
     }
 }
