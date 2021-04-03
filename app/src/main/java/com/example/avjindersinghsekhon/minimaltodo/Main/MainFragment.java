@@ -646,11 +646,16 @@ public class MainFragment extends AppDefaultFragment {
             //original
             if (item.hasReminder() && item.getToDoDate() != null) {
                 holder.mToDoTextview.setMaxLines(2); // changed from 1
+                // holder.mToDoStartDateTextview.setMaxLines(2); 
                 holder.mTimeTextView.setVisibility(View.VISIBLE);
+                // holder.mToDoStartDateTextview.setVisibility(View.VISIBLE);
+
+
 //                holder.mToDoTextview.setVisibility(View.GONE);
             } else {
                 holder.mTimeTextView.setVisibility(View.GONE);
                 holder.mToDoTextview.setMaxLines(3); //changed from 2
+                // holder.mToDoStartDateTextview.setMaxLines(1); 
             }
 
 
@@ -658,11 +663,15 @@ public class MainFragment extends AppDefaultFragment {
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
             String dateFormatted = item.dateToStringNoTime(item.getStartDate(), "MM/dd/yyyy");
-            holder.mToDoTextview.setText(item.getToDoText() + "\n" + dateFormatted);
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + "Event Date: " + dateFormatted);
+            // holder.mToDoStartDateTextview.setText("Event Date: " + dateFormatted);
+
             //holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
             // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
+            // holder.mToDoStartDateTextview.setTextColor(todoTextColor);
+
 
 //            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
 
@@ -690,7 +699,7 @@ public class MainFragment extends AppDefaultFragment {
                 } else {
                     timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_12_HOUR, item.getToDoDate());
                 }
-                holder.mTimeTextView.setText(timeToShow);
+                holder.mTimeTextView.setText("Reminder: " + timeToShow);
             }
 
 
@@ -716,7 +725,7 @@ public class MainFragment extends AppDefaultFragment {
             //            TextView mColorTextView;
             ImageView mColorImageView;
             TextView mTimeTextView;
-//            int color = -1;
+            // TextView mToDoStartDateTextview;
 
             public ViewHolder(View v) {
                 super(v);
@@ -732,7 +741,7 @@ public class MainFragment extends AppDefaultFragment {
                 });
                 mToDoTextview = (TextView) v.findViewById(R.id.toDoListItemTextview);
                 mTimeTextView = (TextView) v.findViewById(R.id.todoListItemTimeTextView);
-//                mColorTextView = (TextView)v.findViewById(R.id.toDoColorTextView);
+                // mToDoStartDateTextview = (TextView) v.findViewById(R.id.todoListItemDateTextView);
                 mColorImageView = (ImageView) v.findViewById(R.id.toDoListItemColorImageView);
                 linearLayout = (LinearLayout) v.findViewById(R.id.listItemLinearLayout);
             }
