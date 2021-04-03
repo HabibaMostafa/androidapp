@@ -253,9 +253,9 @@ public class ToDoItem implements Serializable {
         //is isRecurring, then add the array,
         if(this.isRecurring) {
 
-            //maybe repopulate it before writing?
 
-            setupEndlessRecurrence();
+            //setup the array before writing
+            populateRecurringDates();
 
             JSONArray datesArray = new JSONArray();
 
@@ -576,6 +576,11 @@ public class ToDoItem implements Serializable {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
 
+            //setTime to 00:00
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now
             }
@@ -608,6 +613,11 @@ public class ToDoItem implements Serializable {
         for(int i = 0; i < maxLength; i++) {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
+
+            //setTime to 00:00
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
 
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now
@@ -652,6 +662,11 @@ public class ToDoItem implements Serializable {
         for(int i = 0; i < this.recurrenceLimit; i++) {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
+
+            //setTime to 00:00
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
 
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now

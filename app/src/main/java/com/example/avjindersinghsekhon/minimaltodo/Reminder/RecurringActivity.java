@@ -22,5 +22,15 @@ public class RecurringActivity extends AppCompatActivity {
 //            fragmentManager.beginTransaction().add(R.id.rec1, fragment).commit();
 //        }
 
+        String stringFromOther;
+        stringFromOther = getIntent().getStringExtra("test_string");
+        System.out.println(stringFromOther);
+
+
+    }
+
+
+    void test() {
+        System.out.println("testFunction!");
     }
 }
