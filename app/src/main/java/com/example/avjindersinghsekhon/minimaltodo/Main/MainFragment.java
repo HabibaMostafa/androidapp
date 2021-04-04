@@ -67,6 +67,9 @@ public class MainFragment extends AppDefaultFragment {
     private ArrayList<ToDoItem> mToDoItemsArrayList;
     private ArrayList<ToDoItem> mStoredArrayList;
 
+    private ToDoItem mDeletedToDo;
+    private ArrayList<ToDoItem> mDeletedArrayList;
+
     private ArrayList<String> labelList;
 
     private String selectedData = "Todays Date";
@@ -128,6 +131,10 @@ public class MainFragment extends AppDefaultFragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(CHANGE_OCCURED, false);
         editor.apply();
+
+        //initialize deleted variable elements.
+        mDeletedToDo = null;
+        mDeletedArrayList = new ArrayList<>();
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
@@ -196,6 +203,8 @@ public class MainFragment extends AppDefaultFragment {
 //                startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM, options.toBundle());
 
                 startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM);
+
+
             }
         });
 
@@ -258,7 +267,6 @@ public class MainFragment extends AppDefaultFragment {
         // save labels to disk
 
         try {
-            
             labelData.saveLabels(labelList);
         } catch (Exception e) {
             Log.d("label", e.toString());
@@ -312,7 +320,7 @@ public class MainFragment extends AppDefaultFragment {
                     if (CalendarDate.getSelectedDate().contains("noData")){
                         itemstoReturn.add(item);
                     }
-                    else if (item.getToDoDate() != null) {
+                    else if (item.getStartDate() != null) {
 
                         //strip ending from selected date for search.
                         String temp = "temp";
@@ -322,7 +330,7 @@ public class MainFragment extends AppDefaultFragment {
                         }
 
                         //search to see if dates match
-                        String todoDate = item.getToDoDate().toString();
+                        String todoDate = item.getStartDate().toString();
                         if (todoDate.contains(temp)){
                             itemstoReturn.add(item);
                         }
@@ -402,6 +410,10 @@ public class MainFragment extends AppDefaultFragment {
 
 
         }
+    }
+
+    public void resetCalendar() {
+        getActivity().recreate();
     }
 
     private void setAlarms() {
@@ -498,9 +510,16 @@ public class MainFragment extends AppDefaultFragment {
             if (!existed) {
                 addToDataStore(item);
             }
-
-
         }
+
+
+
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private AlarmManager getAlarmManager() {
@@ -566,6 +585,10 @@ public class MainFragment extends AppDefaultFragment {
         public void onItemRemoved(final int position) {
             //Remove this line if not using Google Analytics
             app.send(this, "Action", "Swiped Todo Away");
+
+            //add removed item to list of deleted items.
+            mDeletedToDo = items.get(position);
+            mDeletedArrayList.add(mDeletedToDo);
 
             mJustDeletedToDoItem = items.remove(position);
             mIndexOfDeletedToDoItem = position;
@@ -633,7 +656,10 @@ public class MainFragment extends AppDefaultFragment {
 
             // my code 
             // holder.mToDoTextview.setMaxLines(2);
-            holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+            // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
+            String dateFormatted = item.dateToStringNoTime(item.getStartDate(), "MM/dd/yyyy");
+            holder.mToDoTextview.setText(item.getToDoText() + "\n" + dateFormatted);
+            //holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
             // holder.mToDoTextview.setText(item.getToDoText());
             holder.mToDoTextview.setTextColor(todoTextColor);
@@ -732,19 +758,40 @@ public class MainFragment extends AppDefaultFragment {
     @Override
     public void onPause() {
         super.onPause();
+
+        //loop through to-do items within list and compare to stored items. if match then delete from master list.
+        if (mDeletedToDo != null){
+            for (int j=0; j < mDeletedArrayList.size(); j++){
+                for (int i=0; i < mStoredArrayList.size(); i++){
+                    if (mStoredArrayList.get(i).getToDoText().contains(mDeletedArrayList.get(j).getToDoText()) && mStoredArrayList.get(i).getStartDate().compareTo(mDeletedArrayList.get(j).getStartDate()) == 0) {
+                        mStoredArrayList.remove(i);
+                    }
+                }
+            }
+        }
+
         try {
             storeRetrieveData.saveToFile(mStoredArrayList);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
+
+        super.onPause();
+
     }
 
 
     @Override
     public void onDestroy() {
+        try {
+            storeRetrieveData.saveToFile(mStoredArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
 
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
+
     }
 
 

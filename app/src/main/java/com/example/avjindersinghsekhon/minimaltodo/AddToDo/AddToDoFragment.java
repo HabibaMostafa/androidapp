@@ -382,7 +382,31 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     EditText user_input = (EditText) theView.findViewById(R.id.recurrence_limit);
                     String inputted = user_input.getText().toString();
                     Log.d("addtodo", "limit " + inputted);
-                    item.setRecurrenceLimit(Integer.parseInt(inputted));
+
+
+                    //error check if input is numeric
+                    int charsNotNumeric = 0;
+                    for(int i = 0; i < user_input.length(); i++ ) {
+                        Character c = inputted.charAt(i);
+                        if (!Character.isDigit(c)) {
+                            charsNotNumeric++;
+                        }
+                    }
+
+                    //Log.d("char", "chars not numeric: " + Integer.toString(charsNotNumeric));
+                    //Log.d("char", "length " + Integer.toString(user_input.length()));
+
+                    if(inputted.equals("")) {
+                        item.setRecurrenceLimit(0);
+                    }
+
+                    else if(charsNotNumeric == 0) {
+                        item.setRecurrenceLimit(Integer.parseInt(inputted));
+                    }
+
+                    else {
+                        item.setRecurrenceLimit(0);
+                    }
                 }
 
                 if (mToDoTextBodyEditText.length() <= 0) {
@@ -393,6 +417,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 } else {
                     app.send(this, "Action", "Make Todo");
                     makeResult(RESULT_OK);
+
+                    item.populateRecurringDates();
                     getActivity().finish();
                 }
                 hideKeyboard(mToDoTextBodyEditText);
@@ -614,6 +640,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         // get the current date and set dateCreated to the current date.
+
 
         return;
 

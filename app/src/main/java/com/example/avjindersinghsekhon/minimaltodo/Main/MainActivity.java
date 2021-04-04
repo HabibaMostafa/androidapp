@@ -67,6 +67,13 @@ public class MainActivity extends AppDefaultActivity {
                 startActivity(newIntent);
                 return true;
 
+//            case R.id.menuResetCalendarItem:
+////                CalendarDate.setSelectedDate("noData");
+////                CalendarDate.setDateChanged(true);
+////                MainFragment newFragment = new MainFragment();
+////                newFragment.resetCalendar();
+//                return true;
+
             case R.id.aboutMeMenuItem:
                 Intent i = new Intent(this, AboutActivity.class);
                 startActivity(i);
