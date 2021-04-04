@@ -42,6 +42,7 @@
         android:layout_gravity="bottom|right|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_filter_white_64dp"
+        app:backgroundTint="#3F51B5"
         app:layout_anchor="@id/myCoordinatorLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
