@@ -1279,6 +1279,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         //update the UI to show the date
         String dateToString = item.dateToStringNoTime(item.getStartDate());
+
+
         recurrenceStart.setText(dateToString);
 
         return;
