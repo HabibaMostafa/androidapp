@@ -562,6 +562,17 @@ public class ToDoItem implements Serializable {
         return converted;
     }
 
+    // pattern is a date format like "MM/dd/yyyy"
+    public String dateToString(Date date, String pattern) {
+        String converted = "";
+
+        if(date == null) {
+            return "null";
+        }
+        DateFormat df = new SimpleDateFormat(pattern);
+        converted = df.format(date);
+        return converted;
+    }
 
 
     public void setupEndlessRecurrence() {

@@ -657,7 +657,7 @@ public class MainFragment extends AppDefaultFragment {
             // my code 
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
-            String dateFormatted = item.dateToStringNoTime(item.getStartDate(), "MM/dd/yyyy");
+            String dateFormatted = item.dateToString(item.getStartDate(), "MM/dd/yyyy hh:mm aa");
             holder.mToDoTextview.setText(item.getToDoText() + "\n" + dateFormatted);
             //holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.getStartDate());
 
