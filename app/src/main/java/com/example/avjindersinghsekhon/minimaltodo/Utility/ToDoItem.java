@@ -726,14 +726,14 @@ public class ToDoItem implements Serializable {
         }
 
 
-        //debug print to see if the dates are being printed correctly
-        Log.d("dates","-----");
-        for(int i = 0; i < this.recurringDates.size(); i++ ) {
-            Log.d("dates", "Date " + Integer.toString(i+1) +":"+ dateToString(this.recurringDates.get(i)));
-
-        }
-        Log.d("dates","-----");
-        return;
+//        //debug print to see if the dates are being printed correctly
+//        Log.d("dates","-----");
+//        for(int i = 0; i < this.recurringDates.size(); i++ ) {
+//            Log.d("dates", "Date " + Integer.toString(i+1) +":"+ dateToString(this.recurringDates.get(i)));
+//
+//        }
+//        Log.d("dates","-----");
+//        return;
     }
 
     public void setRecurringDates(ArrayList<Date> dates) {

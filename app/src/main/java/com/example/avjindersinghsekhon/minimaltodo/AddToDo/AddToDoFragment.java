@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.content.ClipboardManager;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -103,7 +104,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //    private Button recurBtn;
     private boolean updateRecurringCalandar;
     private boolean updateRecurringCalandarEnd;
-    private boolean updateRecurringCalandarTime;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -144,7 +144,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         updateRecurringCalandar = false;
         updateRecurringCalandarEnd = false;
-        updateRecurringCalandarTime = false;
         updateStartTime = false;
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
@@ -257,9 +256,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
 
 
 
@@ -402,7 +398,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     //Log.d("char", "length " + Integer.toString(user_input.length()));
 
                     if(inputted.equals("")) {
-                        item.setRecurrenceLimit(0);
+                        item.setRecurrenceLimit(1);
                     }
 
                     else if(charsNotNumeric == 0) {
@@ -410,7 +406,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     }
 
                     else {
-                        item.setRecurrenceLimit(0);
+                        item.setRecurrenceLimit(1);
                     }
                 }
 
@@ -422,13 +418,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
                 if (mToDoTextBodyEditText.length() <= 0) {
                     mToDoTextBodyEditText.setError(getString(R.string.todo_error));
+                    Log.d("clicksend", getString(R.string.todo_error));
                 } else if (mUserReminderDate != null && mUserReminderDate.before(new Date())) {
-                    app.send(this, "Action", "Date in the Past");
+                    app.send(this, "clicksend", "Date in the Past");
                     makeResult(RESULT_CANCELED);
+                    Log.d("clicksend","Date in the Past");
                 } else {
-                    app.send(this, "Action", "Make Todo");
+                    app.send(this, "clicksend", "Make Todo");
                     makeResult(RESULT_OK);
-                    
                     getActivity().finish();
                 }
                 hideKeyboard(mToDoTextBodyEditText);
@@ -913,8 +910,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         if(updateStartTime) {
             Log.d("starttime", "update the clock!!!!");
             setStartTimeUI(theView, hour, minute);
+            setItemStartTime(hour, minute);
+            updateStartTime = false;
         }
-        setTime(hour, minute);
+
+        else {
+            setTime(hour, minute);
+        }
     }
 
     @Override
@@ -1345,7 +1347,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         final int year = calendar.get(Calendar.YEAR);
         final int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
-
         final int hour = calendar.get(Calendar.HOUR);
         final int minute = calendar.get(Calendar.MINUTE);
         EditText startTime = (EditText) v.findViewById(R.id.recurring_start_time);
@@ -1378,30 +1379,35 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 updateRecurringCalandar = true;
             }
         });
-        
-        /*******************************************/
+
+        return;
+    }
+
+
+    private void makeStartTimeListener(View v) {
+
+        EditText startTime = (EditText) v.findViewById(R.id.recurring_start_time);
         startTime.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                if(savedDate == null) {
-//                    Date newDate = new Date();
-//                    item.setStartDate(newDate);
-//                }
+                ToDoItem item = mUserToDoItem;
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(item.getStartDate());
+                int hour = cal.get(Calendar.HOUR);
+                int minute = cal.get(Calendar.MINUTE);
 
                 TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoFragment.this, hour, minute, DateFormat.is24HourFormat(getContext()));
                 if (theme.equals(MainFragment.DARKTHEME)) {
                     timePickerDialog.setThemeDark(true);
                 }
                 timePickerDialog.show(getActivity().getFragmentManager(), "TimeFragment");
-//                updateRecurringCalandarTime = true;
                 updateStartTime = true;
             }
         });
-        /*******************************************/ 
+        /*******************************************/
         return;
     }
-
 //    checks what the existing end condition is set in the ToDo Item.
     private void updateEndCondition(View v) {
         RadioGroup rg = (RadioGroup) v.findViewById(R.id.recurring_end_group);
@@ -1607,11 +1613,15 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         //update the start date
         updateStartDate(v);
 
-        //update the time
-        setTimeToStartDateTime(v);
 
         //set a listener for the start date
         setStartDateListener(v);
+
+        //update the time
+        setTimeToStartDateTime(v);
+
+        //setup a listener for the start time
+        makeStartTimeListener(v);
 
         //listener for start time
         updateStartEditTime(v);
@@ -1649,37 +1659,37 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
 
-        EditText startDate = (EditText) v.findViewById(R.id.recurring_start_date);
-        EditText startTime = (EditText) v.findViewById(R.id.recurring_start_time);
-
-        String dateStr = String.valueOf(startDate.getText());
-        String timeStr = String.valueOf(startTime.getText());
-
-        //remove all white space from the date time strings
-        dateStr = dateStr.replaceAll("\\s+","");
-        timeStr = timeStr.replaceAll("\\s+","");
-        String combined = dateStr + " " + timeStr;
-
-        Log.d("starttime", "Date no white space: " + dateStr);
-        Log.d("starttime", "Time no white space: " + timeStr);
-        Log.d("starttime", "Combined: " + combined);
-
-        //formatter for the string to be converted to a date
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-//        combined = "01/01/2009 4:56";
-        Date convertedDate = null;
-
-        if(combined != null) {
-            try {
-                convertedDate = formatter.parse(combined);
-            } catch (Exception e) {
-                Log.d("AdToDoFragment.java", e.toString());
-            }
-        }
-
-        if(convertedDate != null) {
-            item.setStartDate(convertedDate);
-        }
+//        EditText startDate = (EditText) v.findViewById(R.id.recurring_start_date);
+//        EditText startTime = (EditText) v.findViewById(R.id.recurring_start_time);
+//
+//        String dateStr = String.valueOf(startDate.getText());
+//        String timeStr = String.valueOf(startTime.getText());
+//
+//        //remove all white space from the date time strings
+//        dateStr = dateStr.replaceAll("\\s+","");
+//        timeStr = timeStr.replaceAll("\\s+","");
+//        String combined = dateStr + " " + timeStr;
+//
+//        Log.d("starttime", "Date no white space: " + dateStr);
+//        Log.d("starttime", "Time no white space: " + timeStr);
+//        Log.d("starttime", "Combined: " + combined);
+//
+//        //formatter for the string to be converted to a date
+//        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+////        combined = "01/01/2009 4:56";
+//        Date convertedDate = null;
+//
+//        if(combined != null) {
+//            try {
+//                convertedDate = formatter.parse(combined);
+//            } catch (Exception e) {
+//                Log.d("AdToDoFragment.java", e.toString());
+//            }
+//        }
+//
+//        if(convertedDate != null) {
+//            item.setStartDate(convertedDate);
+//        }
 
         return;
     }
@@ -1702,6 +1712,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         String toSet = mUserToDoItem.dateToString(cal.getTime(), "hh:mm aa");
         startTime.setText(toSet);
         return;
+    }
+
+    private void setItemStartTime(int hour, int minute) {
+        Date start = mUserToDoItem.getStartDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(start);
+        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.MINUTE, minute);
+        Date newDate = cal.getTime();
+
+        mUserToDoItem.setStartDate(newDate);
     }
 
 
