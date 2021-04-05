@@ -1128,11 +1128,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private void setupIntervalSpinner(View the_view) {
 
         ArrayList<String> intervals = new ArrayList<String>();
-        intervals.add("Day");
-        intervals.add("Week");
-        intervals.add("Two Weeks");
-        intervals.add("Month");
-        intervals.add("Year");
+        intervals.add("Daily");
+        intervals.add("Weekly");
+        intervals.add("Bi-weekly");
+        intervals.add("Monthly");
+        intervals.add("Yearly");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.simple_spinner_item, intervals) {
             //moves all labels to the center of the dropdown menu
@@ -1166,18 +1166,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         //check the ToDoItem and selected the saved interval (if there is one, else set default to day)
         String interval = item.getInterval();
         if(interval == null) {
-            item.setInterval("Day");
+            item.setInterval("Daily");
         }
         else {
-            if (interval.equals("Day")) {
+            if (interval.equals("Daily")) {
                 selectedIndex = 0;
-            } else if (interval.equals("Week")) {
+            } else if (interval.equals("Weekly")) {
                 selectedIndex = 1;
-            } else if (interval.equals("Two Weeks")) {
+            } else if (interval.equals("Bi-weekly")) {
                 selectedIndex = 2;
-            } else if (interval.equals("Month")) {
+            } else if (interval.equals("Monthly")) {
                 selectedIndex = 3;
-            } else if (interval.equals("Year")) {
+            } else if (interval.equals("Year;y")) {
                 selectedIndex = 4;
             }
         }
@@ -1189,23 +1189,23 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
                 switch(i) {
                     case 0:
-                        mUserToDoItem.setInterval("Day");
+                        mUserToDoItem.setInterval("Daily");
                         break;
 
                     case 1:
-                        mUserToDoItem.setInterval("Week");
+                        mUserToDoItem.setInterval("Weekly");
                         break;
 
                     case 2:
-                        mUserToDoItem.setInterval("Two Weeks");
+                        mUserToDoItem.setInterval("Bi-weekly");
                         break;
 
                     case 3:
-                        mUserToDoItem.setInterval("Month");
+                        mUserToDoItem.setInterval("Monthly");
                         break;
 
                     case 4:
-                        mUserToDoItem.setInterval("Year");
+                        mUserToDoItem.setInterval("Yearly");
 
                         break;
 
