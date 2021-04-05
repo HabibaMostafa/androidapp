@@ -1396,7 +1396,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 ToDoItem item = mUserToDoItem;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(item.getStartDate());
-                int hour = cal.get(Calendar.HOUR);
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minute = cal.get(Calendar.MINUTE);
 
                 TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoFragment.this, hour, minute, DateFormat.is24HourFormat(getContext()));
@@ -1707,7 +1707,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, min);
 
 
@@ -1720,7 +1720,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         Date start = mUserToDoItem.getStartDate();
         Calendar cal = Calendar.getInstance();
         cal.setTime(start);
-        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
         Date newDate = cal.getTime();
 
@@ -1734,7 +1734,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         Calendar cal = Calendar.getInstance();
         cal.setTime(start);
 
-        int hour = cal.get(Calendar.HOUR);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
 
         EditText startTime = (EditText) view.findViewById(R.id.recurring_start_time);
