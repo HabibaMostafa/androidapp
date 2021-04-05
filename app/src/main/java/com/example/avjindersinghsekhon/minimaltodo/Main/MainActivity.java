@@ -29,13 +29,13 @@ public class MainActivity extends AppDefaultActivity {
 
             //if data is present in Calendar Date object, then display the selected date within main list view
             if (CalendarDate.selectedDate.contains("noData")){
-                setActionBarText("Minimal");
+                setActionBarText("Minimal To-do");
             } else {
                 String date = "temp";
                 if (CalendarDate.getSelectedDate().contains("00:00:00")){
                     String remove = "00:00:00 EDT 2021";
                     date = CalendarDate.getSelectedDate().substring(0, CalendarDate.getSelectedDate().length() - remove.length());
-                    setActionBarText("Minimal:  " + date);
+                    setActionBarText("Minimal ToDo:  " + date);
                 }
             }
         }

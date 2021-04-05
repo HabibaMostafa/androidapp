@@ -1,42 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/base_toolbar"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="120dp"
+        android:fontFamily="arial"
         android:text="@string/calendar_view"
-        android:textSize="35sp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        />
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btnReturn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:layout_marginTop="30dp"-->
-<!--            android:textColor="@color/mdtp_transparent_black"-->
-<!--            android:background="#D0DFEF"-->
-<!--            android:text="Back" />-->
-
-<!--    </LinearLayout>-->
-
+        android:textColor="#FFFFFF"
+        android:textSize="35sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="200dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >
@@ -51,10 +35,16 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnReset"
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/resetDateButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset Date" />
+        android:layout_gravity="bottom|right|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_filter_white_64dp"
+        app:backgroundTint="#3F51B5"
+        app:layout_anchor="@id/myCoordinatorLayout"
+        app:layout_anchorGravity="bottom|right|end" />
 
-</LinearLayout>
+
+</FrameLayout>
