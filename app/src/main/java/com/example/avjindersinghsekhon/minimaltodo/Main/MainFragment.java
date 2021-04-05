@@ -66,6 +66,7 @@ public class MainFragment extends AppDefaultFragment {
 
     private ArrayList<ToDoItem> mToDoItemsArrayList;
     private ArrayList<ToDoItem> mStoredArrayList;
+    private ArrayList<Date> datesList;
 
     private ToDoItem mDeletedToDo;
     private ArrayList<ToDoItem> mDeletedArrayList;
@@ -502,6 +503,8 @@ public class MainFragment extends AppDefaultFragment {
             for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
                 if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
                     mToDoItemsArrayList.set(i, item);
+                    //update stored item list when an item has been edited.
+                    updateStoredList(item);
                     existed = true;
                     adapter.notifyDataSetChanged();
                     break;
@@ -548,10 +551,32 @@ public class MainFragment extends AppDefaultFragment {
     }
 
     private void addToDataStore(ToDoItem item) {
-        mToDoItemsArrayList.add(item);
-        mStoredArrayList.add(item);
-        adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
+        if (item.getRecurring()){
+            datesList = item.getRecurringDates();
+            //set multiple items based on dates.
+            for (int i=0; i < datesList.size(); i++){
+                //create new item
+                ToDoItem newItem = new ToDoItem();
 
+                //fill with data
+                newItem.setToDoText(item.getToDoText());
+                newItem.setmToDoDescription(item.getmToDoDescription());
+                newItem.setStartDate(datesList.get(i));
+                newItem.setmToDoLabel(item.getmToDoLabel());
+                newItem.setTodoColor(item.getTodoColor());
+                newItem.setmToDoStatus(item.getmToDoStatus());
+                newItem.setHasReminder(item.hasReminder());
+                //newItem.setRecurring(item.getRecurring());
+
+                //assign to both lists
+                mToDoItemsArrayList.add(newItem);
+                mStoredArrayList.add(newItem);
+            }
+        } else {
+            mToDoItemsArrayList.add(item);
+            mStoredArrayList.add(item);
+        }
+        adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
     }
 
     public void makeUpItems(ArrayList<ToDoItem> items, int len) {
@@ -819,5 +844,15 @@ public class MainFragment extends AppDefaultFragment {
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+    //update stored item list when an item has been edited.
+    public void updateStoredList(ToDoItem item){
+        for (int i = 0; i < mStoredArrayList.size(); i++) {
+            if (item.getIdentifier().equals(mStoredArrayList.get(i).getIdentifier())) {
+                mStoredArrayList.set(i, item);
+                break;
+            }
+        }
     }
 }
