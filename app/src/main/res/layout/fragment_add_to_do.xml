@@ -333,9 +333,9 @@
                                         android:layout_weight="1"
                                         android:padding="10sp"
                                         android:text="Repeats: "
+                                        android:textColor="#FFFFFF"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
-                                        android:textColor="#FFFFFF"
                                         app:layout_constraintBaseline_toBaselineOf="@+id/editTextNumberDecimal"
                                         app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal"
                                         app:layout_constraintHorizontal_bias="0.5"
@@ -369,7 +369,7 @@
 
                                         <RadioButton
                                             android:id="@+id/recurrence_radio_endless"
-                                            android:layout_width="match_parent"
+                                            android:layout_width="179dp"
                                             android:layout_height="wrap_content"
                                             android:text="Never Ends" />
 
