@@ -588,9 +588,9 @@ public class ToDoItem implements Serializable {
             c.setTime(lastDate);
 
             //setTime to 00:00
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
+//            c.set(Calendar.HOUR_OF_DAY, 0);
+//            c.set(Calendar.MINUTE, 0);
+//            c.set(Calendar.SECOND, 0);
 
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now
@@ -626,9 +626,9 @@ public class ToDoItem implements Serializable {
             c.setTime(lastDate);
 
             //setTime to 00:00
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
+//            c.set(Calendar.HOUR_OF_DAY, 0);
+//            c.set(Calendar.MINUTE, 0);
+//            c.set(Calendar.SECOND, 0);
 
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now
@@ -675,9 +675,9 @@ public class ToDoItem implements Serializable {
             c.setTime(lastDate);
 
             //setTime to 00:00
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
+//            c.set(Calendar.HOUR_OF_DAY, 0);
+////            c.set(Calendar.MINUTE, 0);
+////            c.set(Calendar.SECOND, 0);
 
             if(this.interval.equals("Day")) {
                 c.add(Calendar.DATE, 1); // add one day for now

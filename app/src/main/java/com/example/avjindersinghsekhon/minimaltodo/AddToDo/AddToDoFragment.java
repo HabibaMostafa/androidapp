@@ -925,8 +925,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             setStartDate(year, month, day);
             updateRecurringCalandar = false;
         }
-
-        if(updateRecurringCalandarEnd) {
+        else if(updateRecurringCalandarEnd) {
             setEndDate(year, month, day);
             updateRecurringCalandarEnd = false;
         }
