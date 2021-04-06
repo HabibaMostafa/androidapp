@@ -32,6 +32,7 @@
                 android:id="@+id/toDoListItemTextview"
                 android:padding="8dp"
                 android:maxLines="2"
+                android:paddingRight="20dip"
                 android:lines="2"
                 android:gravity="start|center"
                 android:textColor="@color/secondary_text"
