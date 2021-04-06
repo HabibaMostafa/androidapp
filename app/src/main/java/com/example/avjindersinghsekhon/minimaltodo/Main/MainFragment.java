@@ -564,7 +564,7 @@ public class MainFragment extends AppDefaultFragment {
                 newItem.setTodoColor(item.getTodoColor());
                 newItem.setmToDoStatus(item.getmToDoStatus());
                 newItem.setHasReminder(item.hasReminder());
-                //newItem.setRecurring(item.getRecurring());
+                newItem.setRecurring(item.getRecurring());
 
                 //assign to both lists
                 mToDoItemsArrayList.add(newItem);
@@ -674,16 +674,6 @@ public class MainFragment extends AppDefaultFragment {
                 holder.mTimeTextView.setVisibility(View.GONE);
                 holder.mToDoTextview.setMaxLines(3); //changed from 2
             }
-
-            if(item.getRecurring() == true || item.getInterval() == "Day" || item.getInterval() == "Week" || item.getInterval() == "Two Weeks"
-            || item.getInterval() == "Month" || item.getInterval() == "Year"){
-                Log.d("myTag", "Recurring: " + item.getRecurring());
-                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_refresh_64dp, 0);
-
-            } else {
-                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
             String dateFormatted = item.dateToString(item.getStartDate(), "MMM dd, yyyy hh:mm aa");
@@ -702,7 +692,14 @@ public class MainFragment extends AppDefaultFragment {
                     .endConfig()
                     .buildRound(item.getToDoText().substring(0, 1), item.getTodoColor());
 
-//            TextDrawable myDrawable = TextDrawable.builder().buildRound(item.getToDoText().substring(0,1),holder.color);
+            if(item.getRecurring() == true || item.getInterval() == "Day" || item.getInterval() == "Week" || item.getInterval() == "Two Weeks"
+                    || item.getInterval() == "Month" || item.getInterval() == "Year"){
+                Log.d("myTag", "Recurring: " + item.getRecurring());
+                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_refresh_64dp, 0);
+            } else {
+                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
             holder.mColorImageView.setImageDrawable(myDrawable);
             if (item.getToDoDate() != null) {
                 String timeToShow;
@@ -713,7 +710,6 @@ public class MainFragment extends AppDefaultFragment {
                 }
                 holder.mTimeTextView.setText("Reminder: " + timeToShow);
             }
-
 
         }
 
