@@ -515,8 +515,6 @@ public class MainFragment extends AppDefaultFragment {
             }
         }
 
-
-
         try {
             storeRetrieveData.saveToFile(mStoredArrayList);
         } catch (JSONException | IOException e) {
@@ -671,20 +669,21 @@ public class MainFragment extends AppDefaultFragment {
             //original
             if (item.hasReminder() && item.getToDoDate() != null) {
                 holder.mToDoTextview.setMaxLines(2); // changed from 1
-                // holder.mToDoStartDateTextview.setMaxLines(2); 
                 holder.mTimeTextView.setVisibility(View.VISIBLE);
-                // holder.mToDoStartDateTextview.setVisibility(View.VISIBLE);
-
-
-//                holder.mToDoTextview.setVisibility(View.GONE);
             } else {
                 holder.mTimeTextView.setVisibility(View.GONE);
                 holder.mToDoTextview.setMaxLines(3); //changed from 2
-                // holder.mToDoStartDateTextview.setMaxLines(1); 
             }
 
+            if(item.getRecurring() == true || item.getInterval() == "Day" || item.getInterval() == "Week" || item.getInterval() == "Two Weeks"
+            || item.getInterval() == "Month" || item.getInterval() == "Year"){
+                Log.d("myTag", "Recurring: " + item.getRecurring());
+                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_refresh_64dp, 0);
 
-            // my code 
+            } else {
+                holder.mToDoTextview.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
             // holder.mToDoTextview.setMaxLines(2);
             // TEMP: holder.mToDoTextview.setText(item.getToDoText() + "\n" + item.assignedDateToString());
             String dateFormatted = item.dateToString(item.getStartDate(), "MMM dd, yyyy hh:mm aa");
@@ -696,17 +695,6 @@ public class MainFragment extends AppDefaultFragment {
             holder.mToDoTextview.setTextColor(todoTextColor);
             // holder.mToDoStartDateTextview.setTextColor(todoTextColor);
 
-
-//            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
-
-//            TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);
-            //We check if holder.color is set or not
-//            if(item.getTodoColor() == null){
-//                ColorGenerator generator = ColorGenerator.MATERIAL;
-//                int color = generator.getRandomColor();
-//                item.setTodoColor(color+"");
-//            }
-//            Log.d("OskarSchindler", "Color: "+item.getTodoColor());
             TextDrawable myDrawable = TextDrawable.builder().beginConfig()
                     .textColor(Color.WHITE)
                     .useFont(Typeface.DEFAULT)
