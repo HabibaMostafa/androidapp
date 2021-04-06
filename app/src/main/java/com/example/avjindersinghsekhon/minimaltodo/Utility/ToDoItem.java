@@ -255,7 +255,7 @@ public class ToDoItem implements Serializable {
 
 
             //setup the array before writing
-            populateRecurringDates();
+//            populateRecurringDates();
 
             JSONArray datesArray = new JSONArray();
 
