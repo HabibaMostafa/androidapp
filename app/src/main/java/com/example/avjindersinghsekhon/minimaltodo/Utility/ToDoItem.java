@@ -583,6 +583,7 @@ public class ToDoItem implements Serializable {
 
         recurringDates = new ArrayList<Date>();
         Date lastDate = this.startDate;
+        recurringDates.add(lastDate);
         for(int i = 0; i < maxLength; i++) {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
@@ -621,6 +622,8 @@ public class ToDoItem implements Serializable {
 
         recurringDates = new ArrayList<Date>();
         Date lastDate = this.startDate;
+
+        recurringDates.add(lastDate);
         for(int i = 0; i < maxLength; i++) {
             Calendar c = Calendar.getInstance();
             c.setTime(lastDate);
@@ -648,10 +651,9 @@ public class ToDoItem implements Serializable {
 
             Date nextDate = c.getTime();
 
-            // need to add one day so the end date is included in the array
             Calendar cal = Calendar.getInstance();
             cal.setTime(this.endDate);
-            cal.add(Calendar.DATE, 1);
+//            cal.add(Calendar.DATE, 1);
             Date checkDate = cal.getTime();
 
             if(nextDate.after(checkDate)) {
@@ -669,6 +671,9 @@ public class ToDoItem implements Serializable {
     public void setupRecurrenceWithLimit() {
         recurringDates = new ArrayList<Date>();
         Date lastDate = this.startDate;
+
+
+        recurringDates.add(lastDate);
 
         for(int i = 0; i < this.recurrenceLimit; i++) {
             Calendar c = Calendar.getInstance();
