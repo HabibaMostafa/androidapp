@@ -54,7 +54,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
 
         Date lastDate = date1;
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.DATE, 1);
@@ -62,7 +62,7 @@ public class TestToDoItem extends TestCase {
             testDates.add(lastDate);
         }
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             assertEquals(item2.getRecurringDates().get(i).toString(), testDates.get(i).toString());
         }
     }
@@ -90,7 +90,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
 
         Date lastDate = date1;
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.DATE, 7);
@@ -98,7 +98,7 @@ public class TestToDoItem extends TestCase {
             testDates.add(lastDate);
         }
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             assertEquals(item2.getRecurringDates().get(i).toString(), testDates.get(i).toString());
         }
     }
@@ -126,7 +126,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
 
         Date lastDate = date1;
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.DATE, 14);
@@ -134,7 +134,7 @@ public class TestToDoItem extends TestCase {
             testDates.add(lastDate);
         }
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             assertEquals(item2.getRecurringDates().get(i).toString(), testDates.get(i).toString());
         }
     }
@@ -162,7 +162,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
 
         Date lastDate = date1;
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.MONTH, 1);
@@ -170,7 +170,7 @@ public class TestToDoItem extends TestCase {
             testDates.add(lastDate);
         }
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             assertEquals(item2.getRecurringDates().get(i).toString(), testDates.get(i).toString());
         }
     }
@@ -199,7 +199,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
 
         Date lastDate = date1;
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.YEAR, 1);
@@ -207,7 +207,7 @@ public class TestToDoItem extends TestCase {
             testDates.add(lastDate);
         }
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             assertEquals(item2.getRecurringDates().get(i).toString(), testDates.get(i).toString());
         }
     }
@@ -240,7 +240,7 @@ public class TestToDoItem extends TestCase {
 
         ArrayList<Date> testDates = new ArrayList<>();
         Date lastDate = start;
-        for(int i = 0; i < 15; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.DATE, 1);
@@ -290,7 +290,7 @@ public class TestToDoItem extends TestCase {
         ArrayList<Date> testDates = new ArrayList<>();
         Date lastDate = start;
 
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < item2.getRecurringDates().size(); i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastDate);
             cal.add(Calendar.YEAR, 1);
